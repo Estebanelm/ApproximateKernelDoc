@@ -1,0 +1,377 @@
+%% ---------------------------------------------------------------------------
+%% intro.tex
+%%
+%% Introduction
+%%
+%% $Id: intro.tex 1477 2010-07-28 21:34:43Z palvarado $
+%% ---------------------------------------------------------------------------
+
+\chapter{Introduction}
+\label{chp:intro}
+
+Computers were invented to accelerate manually created processes. In the beginning, computers
+offered speeds far superior than what a human could manage on specific activities, but their use
+was limited to relatively low data processing. 
+
+Las computadoras fueron creadas para acelerar los procesos realizados manualmente. En
+un principio, las computadoras ofrecían una velocidad muy superior a lo que un ser humano podía lograr
+en actividades específicas, pero su uso se limitaba a procesamiento de datos relativamente bajo.
+Conforme se han logrado avances en tecnologías de semiconductores, ha surgido la necesidad de utilizar
+las computadoras para aplicaciones con un alto nivel de procesamiento, así como un creciente número
+de datos. Esto ha generado una carrera por mantener un nivel de rendimiento aceptable mientras que el
+consumo de energía, tiempo y capacidad de procesamiento no aumenten; o incluso sean reducidos. La
+solución a este creciente problema ha sido por varios años aumentar la capacidad de procesamiento
+,por ejemplo, aumentando la cantidad de transistores por unidad de área. Sin embargo, esta solución
+trae consigo muchas consideraciones y problemas, en especial al aumento del consumo energético.
+
+
+Así, ha surgido un nuevo enfoque para solucionar este problema, la computación aproximada. Esta
+técnica nace a partir del supuesto de que existen casos en los que no se requiere obtener resultados exactos y
+precisos. Muchos datos provienen de fuentes no exactas (sensores, mediciones) o no requieren de un
+procesamiento preciso (aprendizaje de máquina, recomendaciones al usuario, estadística). 
+Este tipo de aplicaciones son conocidas como tolerantes a errores. La computación aproximada busca hacer 
+uso de este tipo de datos para generar algoritmos, lenguajes, compiladores, circuitos y arquitecturas 
+que tienen como objetivo reducir el consumo energético o aumentar el rendimiento al costo de tener un resultado aproximado.
+
+Una de las áreas de investigación más importantes en la actualidad es el aprendizaje de máquina. Su
+característica principal es la toma de decisiones a partir del procesamiento de una gran cantidad de
+datos. Estos datos pueden ser información escrita, visual (imágenes, video), auditiva y la
+retroalimentación de los mismos datos para mejorar el proceso de aprendizaje. Por esta razón, la
+utilización de computación aproximada para reducir el esfuerzo computacional requerido puede ayudar
+a avanzar de manera significativa esta área de investigación.
+
+El presente trabajo busca explorar métodos y técnicas para la definición de hardware aproximado en FPGA 
+de manera que pueda ser utilizado para aplicaciones de aprendizaje de máquina, específicamente en la 
+generación de kernels de hardware para redes neuronales convolucionales por medio de OpenCL. Se espera
+que este trabajo brinde herramientas útiles para cualquier persona que requiera acelerar
+energéticamente sus algoritmos de aprendizaje de máquina por medio del uso de FPGAs.
+
+\section{Project background}
+
+\subsection{Organization}
+
+El proyecto se realizó en el Karlsruher Institut für Technologie (KIT), universidad enfocada en el
+desarrollo de tecnología y ciencia. El KIT surge en 2009 a partir de la unión de la Universidad de
+Karlsruhe, fundada en 1825 como Universidad Fridericiana, y el Centro de Investigación de Karlsruhe. Se
+ubica en Karlsruhe, en el estado de Baden-Württemberg, al suroeste de Alemania. En el mapa de la
+figura 1 se puede observar la ubicación del estado Baden-Württemberg dentro del país europeo, así
+como la ubicación de Karlsruhe dentro de dicho estado.
+
+Actualmente el KIT es una de las más prestigiosas universidades técnicas de Alemania, especializada en
+ciencia e ingeniería. En la figura 2 se presenta el logo institucional de la universidad. Dentro de sus
+facultades se encuentra la Facultad de Informática, una de las primeras en establecerse en Alemania, la
+cual contempla diversos institutos enfocados en la enseñanza y la investigación de diferentes temas
+asociados con Informática.
+
+El Departamento de Ciencias de la Computación está conformado por grupos de trabajo que abarcan los
+diferentes niveles de abstracción de los sistemas computacioneles. En el CES se investigan diversos 
+aspectos relacionados con el diseño de sistemas embebidos, desde la confiabilidad de circuitos
+hasta el manejo de potencia en sistemas de múltiples y muchos núcleos. De forma más general, el
+Instituto Tecnológico de Karlsruhe posee una organización científica dada por disciplinas agrupadas en
+cinco divisiones:
+
+\begin{compactitem}
+    \item División I: Biología, Química e Ingeniería de Procesos.
+    \item División II: Informática, Economía y Sociedad.
+    \item División III: Ingeniería Mecánica y Eléctrica.
+    \item División IV: Entorno Natural y Construido.
+    \item División V: Física y Matemática.
+\end{compactitem}
+
+Estas divisiones están constituidas por institutos del KIT destinados a trabajos de investigación,
+innovación y docencia. Los departamentos del instituto son responsables de la educación universitaria.
+En los Centros KIT, se trabaja en temas de investigación e innovación que se superponen por división,
+apoyando la cooperación interdisciplinaria.
+
+\subsection{Knowledge area}
+
+El proyecto se va a realizar dentro del área de computación aproximada, la cual es parte de las áreas de
+interés de la ingeniería en computadores. Approximate computing looks to relax the numerical equivalence 
+between the specification and implementation of such applications, approximate computing promises significant energy-efficiency
+improvements and has gained significant traction over
+the past few years [2]. Dentro de computación aproximada, el proyecto se enfoca en la utilización del
+FPGA SDK para OpenCL de Intel para el desarrollo de kernels de hardware aproximados y su aplicación
+en redes neuronales convolucionales, evidenciando el efecto que estos kernels tienen en la mejora de 
+rendimiento y uso energético en comparación con kernels exactos. 
+
+Además, OpenCL es una herramienta que permite la definición de procedimientos en plataformas heterogéneas 
+por medio de un lenguaje de programación de alto nivel. El conocimiento de los cambios en hardware por medio 
+de una descripción de software es necesario para el desarrollo del proyecto.
+
+\subsection{Similar works}
+
+Esto es relleno para poner las secciones de la introducción.
+
+\section{Problem statement}
+
+\subsection{Problem context}
+
+En los últimos años, han surgido discusiones sobre los límites físicos (y económicos) de la integración a
+gran escala de transistores [4][5], donde enunciados como la Ley de Moore ejercen presión a las grandes
+empresas que manufacturan chips. El mismo Gordon Moore ha asegurado que esta tendencia no se
+puede mantener por mucho tiempo [6]. Esto lleva a la búsqueda de nuevos paradigmas o técnicas que
+permitan sostener los altos requerimientos de rendimiento y el consumo creciente de energía de las
+aplicaciones del mundo tecnológico, donde se observa una tendencia al procesamiento cada vez mayor
+de grandes cantidades de datos. Han empezado a surgir soluciones a esta demanda creciente como lo
+son los computadores multinúcleo, las arquitecturas multihilo, las computadoras de gran escala,
+procesamiento por medio de GPU y otros.
+A pesar de estas soluciones, existen otros problemas que no se solucionan simplemente con mejorar la
+arquitectura del procesador. Entre estos problemas están:
+● La pared de memoria: Wulf y McKee[7] describen el problema inminente en el que el
+crecimiento superior de la velocidad de los procesadores supera el crecimiento de las
+tecnologías en memoria. Esto requiere soluciones que busquen reducir la cantidad de accesos a
+memoria.
+● La pared de utilización: Taylor et al.[8] notaron un fenómeno que se da conforme aumenta la
+cantidad de transistores en un chip. Este supone un problema en el que al aumentar la escala de
+integración, el porcentaje utilizable del chip se reduce exponencialmente.
+● Problemas de disipación térmica: con el aumento de la frecuencia de los procesadores, el nivel
+de disipación de calor ha aumentado, forzando una reducción en la tensión de operación. Se han
+propuesto soluciones a este problema como la utilización de procesadores multinúcleo con
+núcleos que se desactivan para reducir la carga de trabajo [9].
+Debido a estos problemas y a la creciente existencia de aplicaciones resistentes a errores (e.g. [10]) es
+que surge el paradigma de computación aproximada. Este paradigma busca eliminar el requisito de
+precisión durante el procesamiento con el objetivo de obtener ganancias de eficiencia energética y
+velocidad de procesamiento.
+Una de las áreas de mayor interés en la actualidad es el del aprendizaje de máquina. Esta área busca la
+realización de tareas por parte de un sistema computacional sin necesidad de tener una programación
+específica y, en algunos casos, utilizando retroalimentación a partir de conclusiones previas. Los
+algoritmos utilizados en el aprendizaje de máquina busca construir modelos matemáticos basados en
+datos de “entrenamiento” para realizar tareas sin programación explícita. [11] Debido a su naturaleza,
+las aplicaciones de aprendizaje de máquina no presentan una respuesta exacta inmediatamente, sinoque requieren múltiples ciclos de retroalimentación (y un aumento en los datos de entrenamiento, de
+ser necesario) para llegar a la respuesta esperada, lo cual quiere decir que computación aproximada
+puede ser un paradigma para trabajar este tipo de aplicaciones. [12]
+
+\subsection{Justification of the problem}
+
+La computación aproximada es un área que se encuentra en un período de auge. Existen diversas
+investigaciones y diseños que buscan aprovechar la existencia de aplicaciones tolerantes a errores. Sin
+embargo, es necesario continuar avanzando el paradigma para poder observar sus aportes en el día a
+día. La importancia de este paradigma reside en que no depende del estado actual de la tecnología para
+brindar mejoras energéticas y de rendimiento.
+
+El uso de FPGA en el área de computación aproximada se encuentra poco explorado y aplicaciones en
+lenguaje de máquina son de interés global. Una mejora significativa en estos dos campos (y su
+combinación) generaría nuevas posibilidades para la exploración de soluciones con bajo consumo
+energético y alto nivel de adaptabilidad.Así, este proyecto es importante por varias razones:
+
+\begin{compactitem}
+    \item Permite avanzar la investigación en el área de definición de hardware aproximado utilizando
+herramientas populares como OpenCL, lo cual puede servir de base para próximas
+investigaciones con aplicaciones basadas en FPGA. 
+    \item El uso de una herramienta popular permite agilizar el proceso de generación de resultados en un área poco explorada.
+    \item Genera herramientas listas para ser utilizadas en aplicaciones de aprendizaje de máquina
+basadas en redes neuronales. Estas pueden ser kernels o conjuntos de kernels customizables.
+Cualquier interesado que quiera realizar procesamiento y tenga un margen de error tolerable
+debería ser capaz de utilizar los resultados del proyecto.
+\end{compactitem}
+
+
+
+\subsection{Problem definition}
+
+Las aplicaciones de aprendizaje de máquina se basan en distintos métodos para obtener resultados. Una
+de las técnicas más utilizadas son las redes neuronales (neural networks) cuyo objetivo es imitar el
+trabajo que realiza el cerebro humano para obtener resultados. Además, existe una rama dentro del
+aprendizaje de máquina conocida como aprendizaje profundo (deep learning). Esta consiste en el
+aumento en la cantidad de capas de aprendizaje en las redes neuronales para obtener una mayor
+cantidad de detalles a partir de una entrada de datos [13]. Las capas están representadas por nodos
+(neuronas) que realizan procesamiento sobre la entrada. Este proceso requiere de un alto nivel de
+procesamiento, pero sus resultados son en su mayoría aproximaciones.
+
+Además, las field-programmable gate array (FPGA, por sus siglas en inglés) son dispositivos que
+recientemente han sido el objeto de investigaciones con el objetivo de acelerar el procesamiento
+realizado. Esto debido a que los CPU de uso general no ofrecen la capacidad de procesamiento
+suficiente (operaciones múltiples con alto nivel de complejidad al mismo tiempo) y los GPU, a pesar de
+tener capacidades de procesamiento sobre múltiples datos, no son por completo especializados o
+customizables. El uso de un dispositivo que puede ser programado para tareas específicas (en este caso,
+redes neuronales) ofrece posibilidades de procesamiento que superan aún a los GPU [14].
+
+De esta manera, el proyecto surge con el objetivo de aportar a la investigación en el área de FPGAs para
+uso en aplicaciones de aprendizaje de máquina por medio de definición de hardware aproximado. Cada
+neurona en una red neuronal es representada por medio de un “kernel” de hardware, que define por sí
+mismo los cálculos y procesos que debe realizar cada una de las neuronas. Por medio de herramientas
+de software como OpenCL, es posible definir kernels para realizar tareas de aprendizaje de máquina.
+Así, combinando todas estas áreas y herramientas, se espera lograr mejoras en rendimiento y en
+consumo energético necesarios para suplir la demanda de procesamiento actual.
+
+\section{Objectives}
+
+\subsection{Main objective}
+Esta plantilla \cite{einstein} LaTeX tiene como objetivo simplificar la construcción del
+documento de tesis, presentando ejemplo de figuras y tablas, así como otorgar
+una plataforma de compilación en GNU/Linux que simplifique la administración de
+todo el documento.
+
+Diseñar una implementación aproximada de redes neuronales convolucionales en hardware por medio del FPGA SDK para OpenCL de Intel.
+
+\subsection{Specific objectives}
+
+\begin{compactitem}
+    \item Describir los cambios realizables en la herramienta OpenCL para la generación de hardware aproximado en FPGA.
+    \item Crear kernels de hardware aproximados y reutilizables para redes neuronales convolucionales utilizando OpenCL.
+    \item Determinar el nivel de tolerancia al error de aplicaciones de aprendizaje de máquina con redes neuronales al utilizar kernels aproximados en vez de kernels exactos.
+    \item Comprobar la reducción de recursos computacionales al utilizar kernels aproximados con respecto a la utilización de kernels exactos tradicionales.    
+\end{compactitem}
+
+La última sección de la introducción usualmente sí tiene un título estandar que
+es ``Objetivos y estructura del documento'', donde se presentan \emph{en prosa}
+los objetivos general y específicos que ha tenido el proyecto de tesis,
+así como la estructura de la tesis (por ejemplo, ``en el siguiente capítulo se
+esbozan los fundamentos teóricos necesarios para explicar en el
+capítulo~\ref{ch:solucion} la propuesta realizada$\ldots$''
+
+\section{Scope, deliverables and limitations}
+
+\subsection{Scope}
+
+
+\subsection{Deliverables}
+
+En la figura 4 se pueden se observa un diagrama con los entregables del proyecto.
+
+1. Investigación teórica
+
+1.1. Informe recopilatorio de uso de redes neuronales en FPGA: este informe contendrá toda
+la información relevante para ser utilizada en el resto del proyecto y que permita tomar
+decisiones en cuanto a redes neuronales en FPGA.
+
+1.2. Informe de avance con las modificaciones realizables: informe con las posibilidades de
+modificación en la herramienta OpenCL y que afecten la definición de hardware en
+FPGA.
+
+2. Etapa de diseño
+
+2.1. Documentación de método para aproximar redes neuronales: recopila la información
+necesaria sobre los principios de computación aproximada que son aplicables en redes
+neuronales, específicamente para algoritmos de aprendizaje profundo. Debe contener
+modelos matemáticos que puedan ser comparados contra los resultados del proyecto.
+
+2.2. Diseño del modelo de cálculos de error: contiene la formulación matemática que
+permite realizar un cálculo de la precisión de los resultados que se van a obtener y los
+compare con la ganancia de rendimiento.2.3.
+
+2.3. Diseño de una aplicación de prueba: es un documento con el diseño general de una
+aplicación que será utilizara para realizar las pruebas prácticas una vez se haya
+desarrollado el proyecto.
+
+
+3. Desarrollo de código
+
+3.1. Código fuente: código fuente de la aplicación en OpenCL y cualquier otro código
+necesario para realizar las pruebas prácticas.
+
+3.2. Kernels exactos: código fuente de los kernels exactos que se utilizarán para realizar las
+pruebas.
+
+3.3. Kernels aproximados: código fuente de los kernels aproximados que se utilizarán para
+realizar las pruebas.
+
+4. Pruebas
+
+4.1. Resultados de las pruebas exactas: mediciones de rendimiento y precisión al realizar
+pruebas sobre kernels exactos.
+
+4.2. Resultados de las pruebas aproximadas: mediciones de rendimiento y precisión al
+realizar pruebas sobre kernels aproximadas.
+
+4.3. Documentación de resultados: comparación de los resultados obtenidos entre las
+pruebas exactas y aproximadas.
+
+5. Gestión del proyecto
+
+5.1. Documento de diseño: diseño de todas las herramientas desarrolladas durante el
+proyecto.
+
+5.2. Minutas de reuniones: contiene toda la información que se obtenga de las reuniones de
+avance y validación.
+
+5.3. Informe de trabajo final: informe final del trabajo final de graduación con toda la
+información relevante que se generó en el proyecto.
+
+\subsection{Limitations}
+
+LIM-01: ​ el estudiante puede movilizarse a Alemania hasta el primero de Agosto debido a trámites de
+visa europea.
+
+LIM-02:​ el presupuesto del estudiante es de 1000 euros mensuales durante la estadía en Alemania.
+
+LIM-03: el estudiante está atado a las regulaciones y limitaciones de la universidad KIT con los
+estudiantes internacionales.
+
+LIM-04: no hay posibilidad de realizar reuniones presenciales con el profesor asesor del proyecto debido a
+la localización del estudiante durante el proyecto. Toda reunión o comunicación se realizará de manera
+remota.
+
+\subsection{Risks}
+
+RIE-01: ​ Recibir un rechazo de la solicitud de la visa. El proceso de solicitud de visa ya fue iniciado, pero
+existen diversos factores que pueden hacer que la visa sea rechazada y que están fuera del control del
+estudiante.
+- Probabilidad: media. Existe un antecedente de la extensión de solicitud de visa por parte de otro
+estudiante que realizó el mismo viaje hacia Alemania.
+- Impacto: medio. El no tener visa significa que el tiempo de estadía en Alemania se reduce a 3
+meses. El tiempo no se reduce demasiado, pero eso añade una presión extra al estudiante y
+reduce el tiempo efectivo de desarrollo del proyecto.
+- Acciones mitigadoras: se va a iniciar el proyecto con la sección de investigación un tiempo antes
+del viaje hacia Alemania para reducir el impacto de una reducción del tiempo de estadía.
+RIE-02: No conseguir un lugar de residencia para la fecha de llegada a Alemania. Los procesos de
+obtención de residencia en Alemania contienen diversos pasos, entre ellos una entrevista personal que
+supone una mayor dificultad para obtener un lugar de estadía.
+- Probabilidad: baja. A pesar de que cada lugar tiene diferentes procesos, existen muchas
+opciones de estadía y el precio de alquiler no supone un riesgo para el proyecto. Además,
+existen opciones para alojarse mientras se busca una estadía permanente.
+- Impacto: bajo. De no encontrar un hospedaje para la fecha de llegada, el estudiante deberá
+disponer de tiempo de desarrollo del proyecto para conseguir el hospedaje.
+- Acciones mitigadoras: el estudiante debe agotar todas las opciones existentes de hospedaje
+meses antes del viaje a Alemania para aumentar las posibilidades de conseguir alojamiento.
+RIE-03: El estudiante deberá obtener un vuelo que se adapte a las necesidades de fecha de inicio de las
+tareas en Alemania y a las limitaciones de tiempo impuestas por la visa (o falta de ella). Debido a que los
+vuelos suponen un complejo sistema de escalas y destinos, existe un riesgo de obtener un vuelo que
+llegue a Alemania en una fecha posterior a la prevista.
+- Probabilidad: baja. Existen múltiples opciones para conseguir vuelos que se adapten a las
+diferentes necesidades de las personas.
+- Impacto: baja. El proyecto se podría retrasar varios días.
+- Acciones mitigadoras: se debe obtener un vuelo que satisfaga las necesidades del estudiante
+con anticipación y estar atento a nuevas opciones.
+RIE-04: La universidad KIT permite a todo estudiante admitido ser registrado en ella. Esto ofrece
+beneficios específicos para estudiantes matriculados en universidades alemanas, como descuentos en
+transporte público. El riesgo está en que el registro no pueda ser completado.
+- Probabilidad: baja. El estudiante ya fue admitido en la universidad y el cumplir con todos los
+requisitos reduce la posibilidad de que el registro sea rechazado.
+- Impacto: baja. El no ser registrado podría provocar un aumento en los gastos financieros del
+estudiante,. Sin embargo, esto no supone mayor inconveniente.-
+Acciones mitigadoras: el estudiante ha ahorrado dinero extra en caso de necesitar realizar
+gastos mayores de los esperados.
+RIE-05: El proyecto depende de que la herramienta de software permita modificaciones adecuadas para
+la definición de hardware aproximado en FPGA. Un riesgo del proyecto es que la herramienta no
+permita realizar definición de hardware no exacto.
+- Probabilidad: media. La herramienta a utilizar es Intel® FPGA SDK for OpenCLTM. Este es un
+framework de código-cerrado.
+- Impacto: medio. De no ser capaz de utilizar OpenCL para desarrollar el proyecto, se deberá
+acudir a otras opciones, esto retrasaría el proyecto.
+- Acciones mitigadoras: el estudiante deberá buscar otras opciones antes de iniciar el proyecto
+para evitar un bloqueo en el proyecto.
+RIE-06: De ser capaz de realizar modificaciones en la definición de hardware obtenida por parte de la
+herramienta, existe el riesgo de que estas modificaciones no sean suficientes para obtener hardware
+aproximado para kernels de redes neuronales.
+- Probabilidad: media. Esta es una de las mayores incertidumbres del proyecto y parte de los
+resultados de la investigación teórica.
+- Impacto: alto. El no ser capaz de realizar modificaciones para obtener hardware aproximado
+significa un replanteamiento por completo del proyecto.
+- Acciones mitigadoras: la primera tarea que debe realizar el estudiante es investigar las
+diferentes modificaciones que se deben realizar para reducir la incertidumbre del proyecto.
+RIE-07: Con la suposición de que es posible aproximar el hardware generado por la herramienta de
+software, aparece el riesgo de que la aproximación realizada en redes neuronales no permita tener un
+error suficientemente aceptable en los resultados prácticos de los algoritmos de aprendizaje.
+- Probabilidad: baja. Existen diversos estudios que tratan el tema de aproximación de redes
+neuronales.
+- Impacto: medio. Aunque no se obtenga un resultado positivo en algoritmos de aprendizaje, el
+proyecto puede tener resultados que permitan potenciar otras investigaciones.
+- Acciones mitigadoras: el estudiante deberá mantenerse informado con respecto a las
+posibilidades de mejora en redes neuronales así como los niveles de error que pueden ser
+considerados como aceptables.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

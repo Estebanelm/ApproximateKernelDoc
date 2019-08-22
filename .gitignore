@@ -1,0 +1,17 @@
+*.aux
+*~
+*.log
+*.todo
+*.toc
+*.nls
+*.nlo
+*.lot
+*.lof
+*.ind
+*.ilg
+*.idx
+*.blg
+*.bcf
+*.bbl
+*.fdb*
+main.pdf

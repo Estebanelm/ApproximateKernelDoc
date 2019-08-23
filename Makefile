@@ -94,7 +94,7 @@ fig/%.eps : fig/%.ltxfig fig/%.psfrag
 	  $(ECHO) "\includegraphics{$$file.epstmp}" > $$file.psfrag ; \
 	fi ; \
 	($(ECHO) '\documentclass{article}' ; \
-	 $(ECHO) '\usepackage[spanish]{babel}' ; \
+	 $(ECHO) '\usepackage[english]{babel}' ; \
 	 $(ECHO) '\usepackage[utf8]{inputenc}' ; \
 	 $(ECHO) '\usepackage{mathrsfs,amsmath,amssymb,amstext}' ; \
 	 $(ECHO) '\usepackage{graphicx,color,psfrag}' ; \

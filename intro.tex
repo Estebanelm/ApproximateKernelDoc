@@ -13,38 +13,32 @@ Computers were invented to accelerate manually created processes. In the beginni
 offered speeds far superior than what a human could manage on specific activities, but their use
 was limited to relatively low data processing. 
 
-Las computadoras fueron creadas para acelerar los procesos realizados manualmente. En
-un principio, las computadoras ofrecían una velocidad muy superior a lo que un ser humano podía lograr
-en actividades específicas, pero su uso se limitaba a procesamiento de datos relativamente bajo.
-Conforme se han logrado avances en tecnologías de semiconductores, ha surgido la necesidad de utilizar
-las computadoras para aplicaciones con un alto nivel de procesamiento, así como un creciente número
-de datos. Esto ha generado una carrera por mantener un nivel de rendimiento aceptable mientras que el
-consumo de energía, tiempo y capacidad de procesamiento no aumenten; o incluso sean reducidos. La
-solución a este creciente problema ha sido por varios años aumentar la capacidad de procesamiento
-,por ejemplo, aumentando la cantidad de transistores por unidad de área. Sin embargo, esta solución
-trae consigo muchas consideraciones y problemas, en especial al aumento del consumo energético.
+Throughout the era of increasingly advanced semiconductor technologies, a need for using computers 
+with applications for high level processing has risen, along with higher amount of data to process.
+This has generated a race for maintaining a high performance level along with equal or even reduced 
+energy, time and storage consumption. The main solution, for some years now, has been to increase the 
+computing power of the computers via mechanisms such as, for example, increasing the amount of transistors
+per area. This solution, however, has brought with it a lot of considerations and problems, specially 
+regarding energy consumption.
 
+A new approach has surfaced as one of the solutions to the energy consumption problem is, approximate computing.
+This computing paradigm was born on the assumption that there are cases on which an exact result, with high precision,
+is not needed. A lot of data come from inexact (sensors, readings) or do not require a precise processing
+algorithm (machine learning, user recommendation programs, statistics). This type of applications are
+known as error-tolerant. Approximate computing looks to use these types of data to create algorithms,
+languages, compilers, circuits and computer architectures that have the common objective of lowering
+the energy consumption and increasing the performance at the cost of having an approximate result.
 
-Así, ha surgido un nuevo enfoque para solucionar este problema, la computación aproximada. Esta
-técnica nace a partir del supuesto de que existen casos en los que no se requiere obtener resultados exactos y
-precisos. Muchos datos provienen de fuentes no exactas (sensores, mediciones) o no requieren de un
-procesamiento preciso (aprendizaje de máquina, recomendaciones al usuario, estadística). 
-Este tipo de aplicaciones son conocidas como tolerantes a errores. La computación aproximada busca hacer 
-uso de este tipo de datos para generar algoritmos, lenguajes, compiladores, circuitos y arquitecturas 
-que tienen como objetivo reducir el consumo energético o aumentar el rendimiento al costo de tener un resultado aproximado.
+One of the most important areas of research currently is machine learning. Its main property is
+decision making based on processing big amounts of data. This data can be written, visual (images, video) or 
+audio information, as well as taking the feedback into account to improve the learning process.
+Approximate computing can take advantage of this fact and use it to reduce the computational effort
+required and, in this manner, improve significantly the investigation area of machine learning.
 
-Una de las áreas de investigación más importantes en la actualidad es el aprendizaje de máquina. Su
-característica principal es la toma de decisiones a partir del procesamiento de una gran cantidad de
-datos. Estos datos pueden ser información escrita, visual (imágenes, video), auditiva y la
-retroalimentación de los mismos datos para mejorar el proceso de aprendizaje. Por esta razón, la
-utilización de computación aproximada para reducir el esfuerzo computacional requerido puede ayudar
-a avanzar de manera significativa esta área de investigación.
-
-El presente trabajo busca explorar métodos y técnicas para la definición de hardware aproximado en FPGA 
-de manera que pueda ser utilizado para aplicaciones de aprendizaje de máquina, específicamente en la 
-generación de kernels de hardware para redes neuronales convolucionales por medio de OpenCL. Se espera
-que este trabajo brinde herramientas útiles para cualquier persona que requiera acelerar
-energéticamente sus algoritmos de aprendizaje de máquina por medio del uso de FPGAs.
+This work looks to explore methods and techniques for aproximate hardware definition on FPGA, such that
+it could be used on machine learning applications, specifically by generating approximate hardware
+kernels for CNNs through the use of OpenCL. The current project will deliver useful tools for any 
+other developer that requires to accelerate their machine learning algorithms through the use of FPGAs.
 
 \section{Project background}
 

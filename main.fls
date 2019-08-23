@@ -77,8 +77,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
-INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-spanish/spanish.ldf
-INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-spanish/spanish.ldf
+INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+INPUT /usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 INPUT /usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty
@@ -190,8 +190,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/lastpage/lastpage.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/lastpage/lastpage.sty
 OUTPUT /home/pelo/Documents/Documentacion/main.idx
 OUTPUT /home/pelo/Documents/Documentacion/main.nlo
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/spanish.lbx
-INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/spanish.lbx
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+INPUT /usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 INPUT /home/pelo/Documents/Documentacion/main.aux
 INPUT /home/pelo/Documents/Documentacion/main.aux
 OUTPUT /home/pelo/Documents/Documentacion/main.aux
@@ -210,9 +210,9 @@ INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 OUTPUT /home/pelo/Documents/Documentacion/main.out
 OUTPUT /home/pelo/Documents/Documentacion/main.pdf
-OUTPUT /home/pelo/Documents/Documentacion/titlepage_licel_es.aux
-INPUT /home/pelo/Documents/Documentacion/titlepage_licel_es.tex
-INPUT /home/pelo/Documents/Documentacion/titlepage_licel_es.tex
+OUTPUT /home/pelo/Documents/Documentacion/titlepage_licce_en.aux
+INPUT /home/pelo/Documents/Documentacion/titlepage_licce_en.tex
+INPUT /home/pelo/Documents/Documentacion/titlepage_licce_en.tex
 INPUT /home/pelo/Documents/Documentacion/./fig/Firma_TEC-4.pdf
 INPUT ./fig/Firma_TEC-4.pdf
 INPUT ./fig/Firma_TEC-4.pdf
@@ -234,7 +234,6 @@ INPUT /home/pelo/Documents/Documentacion/resumen.tex
 INPUT /home/pelo/Documents/Documentacion/resumen.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 OUTPUT /home/pelo/Documents/Documentacion/main.toc
-INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 OUTPUT /home/pelo/Documents/Documentacion/main.lof
 OUTPUT /home/pelo/Documents/Documentacion/main.lot
 OUTPUT /home/pelo/Documents/Documentacion/notation.aux
@@ -286,6 +285,7 @@ OUTPUT /home/pelo/Documents/Documentacion/teoria.aux
 INPUT /home/pelo/Documents/Documentacion/teoria.tex
 INPUT /home/pelo/Documents/Documentacion/teoria.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 INPUT /home/pelo/Documents/Documentacion/./fig/figtemplate.pdf
 INPUT ./fig/figtemplate.pdf
 INPUT ./fig/figtemplate.pdf
@@ -320,8 +320,8 @@ OUTPUT /home/pelo/Documents/Documentacion/apendice.aux
 INPUT /home/pelo/Documents/Documentacion/apendice.tex
 INPUT /home/pelo/Documents/Documentacion/apendice.tex
 INPUT /home/pelo/Documents/Documentacion/main.aux
-INPUT /home/pelo/Documents/Documentacion/titlepage_licel_es.aux
-INPUT /home/pelo/Documents/Documentacion/titlepage_licel_es.aux
+INPUT /home/pelo/Documents/Documentacion/titlepage_licce_en.aux
+INPUT /home/pelo/Documents/Documentacion/titlepage_licce_en.aux
 INPUT /home/pelo/Documents/Documentacion/dedicatoria.aux
 INPUT /home/pelo/Documents/Documentacion/dedicatoria.aux
 INPUT /home/pelo/Documents/Documentacion/agradecimientos.aux

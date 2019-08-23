@@ -9,14 +9,14 @@
 \chapter{Introduction}
 \label{chp:intro}
 
-Computers were invented to accelerate manually created processes. In the beginning, computers
+Computers were invented to accelerate manual processes. In the beginning, computers
 offered speeds far superior than what a human could manage on specific activities, but their use
 was limited to relatively low data processing. 
 
-Throughout the era of increasingly advanced semiconductor technologies, a need for using computers 
-with applications for high level processing has risen, along with higher amount of data to process.
-This has generated a race for maintaining a high performance level along with equal or even reduced 
-energy, time and storage consumption. The main solution, for some years now, has been to increase the 
+In the current era of increasingly advanced semiconductor technologies, a need for using computers 
+with applications for high level data processing has risen, along with higher amount of data to process.
+This has generated a race for maintaining high performance along with equal or even reduced 
+energy, time and storage consumption. The main solution, for some years, has been to increase the 
 computing power of the computers via mechanisms such as, for example, increasing the amount of transistors
 per area. This solution, however, has brought with it a lot of considerations and problems, specially 
 regarding energy consumption.
@@ -44,14 +44,20 @@ other developer that requires to accelerate their machine learning algorithms th
 
 \subsection{Organization}
 
-The project is developed in the KIT, an university focused on the development of technology and science.
+The project is developed in the KIT, a university focused on the development of technology and science.
 KIT was created on 2009 after the convergence of the University of Karlsruhe, funded on 1825, and the 
 Investigation Center of Karlsruhe. It is located in Karlsruhe, in the Baden-Württemberg state, to the
-southwest of Germany. Figure 1 shows a map with the location of Baden-Württemberg inside the european
+southwest of Germany. Figure \ref{fig:mapakit} shows a map with the location of Baden-Württemberg inside the european
 country and the location of Karlsruhe inside the aforementioned state.
 
-Nowadays, KIT is one of the most prestiogious technical universities in Germany, specialized on engineering
-and science. Figure 2 shows the current logo of the university. KIT is conformed by a scientific organization
+\begin{figure}
+    \includegraphics[width=\linewidth]{fig/mapakit.eps}
+    \caption{Map of Germany with Baden-Wüttemberg marked (left) \cite{badenmap} and location of Karlsruhe within the state (right) \cite{karlsmap}}
+    \label{fig:mapakit}
+\end{figure}
+
+Nowadays, KIT is one of the most prestigious technical universities in Germany, specializing on engineering
+and science. Figure \ref{fig:kitlogo} shows the current logo of the university. KIT is conformed by a scientific organization
 separated by divisions:
 
 \begin{compactitem}
@@ -62,10 +68,16 @@ separated by divisions:
     \item Division V: Physics and Mathematics.
 \end{compactitem}
 
+\begin{figure}
+    \includegraphics[width=\linewidth]{fig/kitlogo.eps}
+    \caption{Logo of the Karlsruher Institut für Technologie \cite{kitlogo}}
+    \label{fig:kitlogo}
+\end{figure}
+
 These divisions are constituted by departments destined to investigational work, innovation and teaching.
 Each department has institutes responsible for university education. Aside from the institutes, there are
 KIT centers, on which topics related to investigation and innovation go beyond the divisions, supporting
-an interdisciplinary cooperation. 
+an interdisciplinary cooperation \cite{kitorg}. 
 
 
 The Department of Informatics is one of the first to be established on Germany. This department is formed
@@ -79,7 +91,7 @@ electrical power on systems with multiple and many cores.
 The project is developed within the technical area of approximate computing, which is part of the areas
 of interest of computer engineering. Approximate computing looks to relax the numerical equivalence 
 between the specification and implementation of such applications, approximate computing promises significant 
-energy-efficiency improvements and has gained significant traction over the past few years [2]. Within
+energy-efficiency improvements and has gained significant traction over the past few years \cite{surveyqu}. Within
 appromate computing, the project focuses on the utilization of \intelOCL to develop approximate hardware
 kernels and their application on CNNs, highlighting the effect of these kernels on the improvement in 
 performance and reduction on energy consumption in comparison to exact kernels.
@@ -90,15 +102,38 @@ description is necessary to develop the project.
 
 \subsection{Similar works}
 
-Esto es relleno para poner las secciones de la introduccion.
+In the area of implementing neural networks on FPGA using OpenCL, notable previous works are:
+\begin{itemize}
+    \item Suda et al. introduce a complete OpenCL-based accelerator design for CNNs based on
+    matrix multiplication. They also explain algorithms to apply convolution by rearranging
+    the components of the input image. This work is an exact CNN that could be used as a base
+    for the current project. \cite{suda}
+    \item Wang et al. propose a CNN implementation on FPGA specifically taking advantage of 
+    the ability to allow communication between layers through data channels \cite{pipecnn}.
+    \item Zhang and Li present a model to analyse the resource usage on an FPGA, as well as
+    implementing their own accelerator based on OpenCL \cite{zhangcnn}.
+\end{itemize}
+
+Regarding the use of approximate computing for CNNs, we can find the following related works:
+\begin{itemize}
+    \item Moons et al. show that using approximations on popular CNNs can increase the energy
+    efficiency of the accelerators and show some of the techniques that can be applied to other
+    CNNs \cite{moons}.
+    \item Kamel et al. compile a lot of techniques that can be used on CNNs and some other 
+    information regarding the application of CNNs on FPGAs \cite{kamel}.
+\end{itemize}
+
+Also, there is the work done by D. Spies [reference missing as the thesis has not been published yet]
+on which some CNN frameworks were implemented for low-power FPGAs, reducing the need for high-end
+FPGAs and allowing for further research on the area.
 
 \section{Problem statement}
 
 \subsection{Problem context}
 
 In the last years, discussions on the physical (and economical) limits of the very large scale integration 
-of transistors have surfaced [4][5], where statements like Moore's Law exert pressure the big chip manufaturers.
-Gordon Moore himself has assured that this trend cannot be maintained for a long time [6]. This leads to the
+of transistors have surfaced \cite{aftermoore}\cite{moorelawlimit}, where statements like Moore's Law exert pressure the big chip manufaturers.
+Gordon Moore himself has assured that this trend cannot be maintained for a long time \cite{mooredead}. This leads to the
 search of new paradigms or techniques that allow to sustatin the high requirements on performance and 
 energy consumption of applications in the technological world, where a need to process even higher amounts
 of data is increasing. Some solutions to this increasing demand have appeared, such as multicore computers,
@@ -108,19 +143,19 @@ Despite these solutions, there exist other problems that cannot be solved just b
 of the processor. Some of these problems are:
 
 \begin{compactitem}
-    \item The memory wall: Wulf and McKee[7] describe an inminent problem on which the superior speed increase
+    \item The memory wall: Wulf and McKee\cite{memorywall} describe an inminent problem on which the superior speed increase
     of the processors is a lot higher that the improvement on memory technologies. This requires solutions that
     try to reduce the amount of memory accesses.
-    \item The utilization wall: Taylor et al.[8] noticed a phenomenom that appears due to the increase on the amount
+    \item The utilization wall: Taylor et al.\cite{utilizationwall} noticed a phenomenom that appears due to the increase on the amount
     of transistors per unit of area in a chip. The problem is related to an exponential reduction of the usable
     percentage of the chip depending on the scale of integration of the transistors.
     \item Problems with thermal dissipation: with the increase of frequency of the microprocessors, the level of 
     heat disipation has increased, forcing a reduction on the operational voltage. Some solutions have been proposed
     to this problem, like the utilization of multicore processorss with cores that deactivate themselves to reduce
-    the workload [9].
+    the workload \cite{whitepaper}.
 \end{compactitem}
 
-Due to these problems and the increasing existence of error-resilient applications (e.g. [10]) paradigms such as
+Due to these problems and the increasing existence of error-resilient applications (e.g. \cite{errortolerant}) paradigms such as
 approximate computing have appeared. This paradigm tries to eliminate, or reduce, the need for precision
 during processing with the goal of obtaining gains in energy efficiency and processing speed.
 
@@ -128,63 +163,64 @@ Furthermore, one area of interest withing the error-resilient application world 
 The goal of this area is to allow a computational system to execute tasks without the need for a prior
 specific programming and, in some cases, using previous results as feedback to improve the execution.
 Algorithms used in machine learning look to build mathematical models based on "training" data to perform
-tasks without explicit programming [11]. Due to their nature, machine learning applications do not present
+tasks without explicit programming \cite{patternrecogbook}. Due to their nature, machine learning applications do not present
 an exact response inmediately, or even never, instead they require multiple feedback cycles to achieve
 the expected response. This means that approximate computing is a potential paradigm to work with this
-type of applications [12].
+type of applications \cite{approximatecomp}.
 
 \subsection{Justification of the problem}
 
-La computación aproximada es un área que se encuentra en un período de auge. Existen diversas
-investigaciones y diseños que buscan aprovechar la existencia de aplicaciones tolerantes a errores. Sin
-embargo, es necesario continuar avanzando el paradigma para poder observar sus aportes en el día a
-día. La importancia de este paradigma reside en que no depende del estado actual de la tecnología para
-brindar mejoras energéticas y de rendimiento.
+Approximate computing is an area that is till in the upswign. There are diverse investigations and designs
+that look to take advantage of the existence of error-tolerant applications. However, it is necessary to
+continue advancing the paradigm and develop new techniques in order to observe its contributions in daily
+life. The importance of this paradigm resides on the fact that it does not depend on the current state
+of the technology to bring forth energetic and performance improvements.
 
-El uso de FPGA en el área de computación aproximada se encuentra poco explorado y aplicaciones en
-lenguaje de máquina son de interés global. Una mejora significativa en estos dos campos (y su
-combinación) generaría nuevas posibilidades para la exploración de soluciones con bajo consumo
-energético y alto nivel de adaptabilidad.Así, este proyecto es importante por varias razones:
+The use of FPGA in the area of approximate computing is still under explored. At the same time, machine
+learning applications are of great interest to a lot of fields. An improvement on current machine learning
+implementations through the combination of both areas would generate new opportunities and solutions
+with low energectic consumption and high adapdability levels. Following this thought, the project is
+important due to the following:
 
 \begin{compactitem}
-    \item Permite avanzar la investigación en el área de definición de hardware aproximado utilizando
-herramientas populares como OpenCL, lo cual puede servir de base para próximas
-investigaciones con aplicaciones basadas en FPGA. 
-    \item El uso de una herramienta popular permite agilizar el proceso de generación de resultados en un área poco explorada.
-    \item Genera herramientas listas para ser utilizadas en aplicaciones de aprendizaje de máquina
-basadas en redes neuronales. Estas pueden ser kernels o conjuntos de kernels customizables.
-Cualquier interesado que quiera realizar procesamiento y tenga un margen de error tolerable
-debería ser capaz de utilizar los resultados del proyecto.
+    \item It allows to advance the investigation on the area of approximate hardware definition
+    using popular tools such as OpenCL, which could be used as the basis for future investigations
+    with FPGA based applications.
+    \item The use of a popular and easy to use tool could speed up the generation of results in a
+    less explored area, such as FPGA implemented neural networks.
+    \item The project generates new tools easily adaptable to machine learning applications based
+    on neural networks. These tools can be individual kernels or sets of customizable kernels. 
+    \item New investigations on error tolerant applications and approximate computing can easily 
+    make use of the findings of this project.
 \end{compactitem}
-
 
 
 \subsection{Problem definition}
 
-Las aplicaciones de aprendizaje de máquina se basan en distintos métodos para obtener resultados. Una
-de las técnicas más utilizadas son las redes neuronales (neural networks) cuyo objetivo es imitar el
-trabajo que realiza el cerebro humano para obtener resultados. Además, existe una rama dentro del
-aprendizaje de máquina conocida como aprendizaje profundo (deep learning). Esta consiste en el
-aumento en la cantidad de capas de aprendizaje en las redes neuronales para obtener una mayor
-cantidad de detalles a partir de una entrada de datos [13]. Las capas están representadas por nodos
-(neuronas) que realizan procesamiento sobre la entrada. Este proceso requiere de un alto nivel de
-procesamiento, pero sus resultados son en su mayoría aproximaciones.
+Machine learning applications are based on different methods used to obtain results.
+One of the most used techniques are called neural networks, with the objective of imitating the work
+done by the human brain to obtain similar results. Furthermore, there is a branch of neural networks
+called deep learning. It consists in the increase of the amount of processing layer in order to obtain
+a bigger amount of details from an input of data \cite{deeplearningoverview}. Layers are represented by nodes (neurons)
+that process data from the input. This processing requires a high level of computation, but its
+results are mostly approximations. CNNs are part of the deep learning neural network implementations, with most
+of its usage focused on analyzing input images.
 
-Además, las field-programmable gate array (FPGA, por sus siglas en inglés) son dispositivos que
-recientemente han sido el objeto de investigaciones con el objetivo de acelerar el procesamiento
-realizado. Esto debido a que los CPU de uso general no ofrecen la capacidad de procesamiento
-suficiente (operaciones múltiples con alto nivel de complejidad al mismo tiempo) y los GPU, a pesar de
-tener capacidades de procesamiento sobre múltiples datos, no son por completo especializados o
-customizables. El uso de un dispositivo que puede ser programado para tareas específicas (en este caso,
-redes neuronales) ofrece posibilidades de procesamiento que superan aún a los GPU [14].
+Now, FPGAs are devices that have been recently the object of investigations with the objective of accelerating
+the current processing being done. The interest in using FPGAs for high amounts of computation comes from
+the limitation of general use CPUs, which do not offer enough processing power (multiple operations with 
+high level of complexity at the same time); and GPUs that, even with the capability of processing high
+amounts of data at the same time, are not specialized enough or even customizable to perform specific tasks.
+The use of a device that can be programmed at the hardware level for specific tasks (in this case, neural networks)
+offers possibilities on processing speed and energy efficiency that surpass GPUs \cite{surveyfpgann}.
 
-De esta manera, el proyecto surge con el objetivo de aportar a la investigación en el área de FPGAs para
-uso en aplicaciones de aprendizaje de máquina por medio de definición de hardware aproximado. Cada
-neurona en una red neuronal es representada por medio de un “kernel” de hardware, que define por sí
-mismo los cálculos y procesos que debe realizar cada una de las neuronas. Por medio de herramientas
-de software como OpenCL, es posible definir kernels para realizar tareas de aprendizaje de máquina.
-Así, combinando todas estas áreas y herramientas, se espera lograr mejoras en rendimiento y en
-consumo energético necesarios para suplir la demanda de procesamiento actual.
+The current project emerges with the objective of contributing to the ongoing investigation efforts
+in the area of FPGAs for machine learning applications through approximate hardware definition.
+Each neuron in a neural network is represented as a "hardware kernel" that gets defined the 
+calculations and processes that it needs to do on the input data to analyze it.
+Through the use of software tools like OpenCL, it is possible to define kernels that perform
+machine learning tasks. So, combining all these areas and tools, an improvement on performance and
+energy consumption must me possible to supply the global demand of processing.
 
 \section{Objectives}
 
@@ -206,83 +242,115 @@ use of \intelOCL.
 
 \subsection{Scope}
 
+The project's end goal is designing, developing and implementing approximate hardware kernels on FPGA.
+These kernels represent each of the layers of a CNN and will allow for an image processing algorithm to be
+performed on them. The end result must be more energy efficient and provide better performance over existing
+implementations of CNNs.
+
+The project is subdivided in the following stages:
+
+\subsubsection{Theoretical investigation}
+
+A first step is to investigate on the following topics:
+
+\begin{itemize}
+    \item Convolutional neural networks.
+    \item OpenCL and hardware definition.
+    \item Approximate computing on neural networks.
+    \item CNN implementation on FPGAs.
+\end{itemize}
+
+This will provide the necessary information to use OpenCL to implement CNNs on FPGA.
+Futhermore, this information can also be used to generate mathematical models to measure the error
+and precision of the generated CNNs, be them exact of approximate, as well as the comparison between
+both implementations.
+
+\subsubsection{Exact CNN implementation on FPGA}
+
+An exact CNN implementation must be developed in order to have a baseline in order
+to develop the approximate kernels. This exact CNN implementation is also used to
+compare results in order to evidence the performance and energy efficiency improvements.
+Finally, the approximate CNN implementation must be a modification of the exact model.
+
+\subsubsection{Approximate CNN implementation on FPGA}
+
+This implementation must be completely based of the exact CNN implementation and will 
+reflect the OpenCL changes that allow for a different hardware definition, one that is 
+approximate and adds errors in the processing of the input data. Also, the approximate
+implementation must have a set maximum error, which should be measurable and used
+in the mathematical models.
+
+\subsubsection{Comparison and mathematical modeling}
+
+Using the results of both the exact and approximate implementation, a mathematical model
+should be created that reflects the changes in the error between the exact and
+approximate implementation of the CNN. This model will indicate which parameters could
+be changed in the approximate implementation in order to reduce or increase the error, as well
+as the repercussions in performance and energy consumption.
 
 \subsection{Deliverables}
 
-En la figura 4 se pueden se observa un diagrama con los entregables del proyecto.
-
-1. Investigación teórica
-
-1.1. Informe recopilatorio de uso de redes neuronales en FPGA: este informe contendrá toda
-la información relevante para ser utilizada en el resto del proyecto y que permita tomar
-decisiones en cuanto a redes neuronales en FPGA.
-
-1.2. Informe de avance con las modificaciones realizables: informe con las posibilidades de
-modificación en la herramienta OpenCL y que afecten la definición de hardware en
-FPGA.
-
-2. Etapa de diseño
-
-2.1. Documentación de método para aproximar redes neuronales: recopila la información
-necesaria sobre los principios de computación aproximada que son aplicables en redes
-neuronales, específicamente para algoritmos de aprendizaje profundo. Debe contener
-modelos matemáticos que puedan ser comparados contra los resultados del proyecto.
-
-2.2. Diseño del modelo de cálculos de error: contiene la formulación matemática que
-permite realizar un cálculo de la precisión de los resultados que se van a obtener y los
-compare con la ganancia de rendimiento.2.3.
-
-2.3. Diseño de una aplicación de prueba: es un documento con el diseño general de una
-aplicación que será utilizara para realizar las pruebas prácticas una vez se haya
-desarrollado el proyecto.
-
-
-3. Desarrollo de código
-
-3.1. Código fuente: código fuente de la aplicación en OpenCL y cualquier otro código
-necesario para realizar las pruebas prácticas.
-
-3.2. Kernels exactos: código fuente de los kernels exactos que se utilizarán para realizar las
-pruebas.
-
-3.3. Kernels aproximados: código fuente de los kernels aproximados que se utilizarán para
-realizar las pruebas.
-
-4. Pruebas
-
-4.1. Resultados de las pruebas exactas: mediciones de rendimiento y precisión al realizar
-pruebas sobre kernels exactos.
-
-4.2. Resultados de las pruebas aproximadas: mediciones de rendimiento y precisión al
-realizar pruebas sobre kernels aproximadas.
-
-4.3. Documentación de resultados: comparación de los resultados obtenidos entre las
-pruebas exactas y aproximadas.
-
-5. Gestión del proyecto
-
-5.1. Documento de diseño: diseño de todas las herramientas desarrolladas durante el
-proyecto.
-
-5.2. Minutas de reuniones: contiene toda la información que se obtenga de las reuniones de
-avance y validación.
-
-5.3. Informe de trabajo final: informe final del trabajo final de graduación con toda la
-información relevante que se generó en el proyecto.
+\begin{enumerate}
+    \item Theoretical investigation
+        \begin{enumerate}
+            \item Compilation report of the use of neural networks on FPGA: this report will contain
+            relevant information to be used in the rest of the project and will enable the decision
+            making in regards to neural networks on FPGA. 
+            \item Progress report with the viable modifications: report with the modification possibilities
+            with OpenCL and that affect the hardware definition on FPGA.
+        \end{enumerate}
+    \item Design stage
+        \begin{enumerate}
+            \item Documentation on how to approximate neural networks: contains the necessary information
+            on the principles of approximate computing that are applicable on neural networks, specifically
+            for CNNs. It should contain mathematical models that can be compared against the results
+            of the project.
+            \item Design of the error calculation model: contains the mathematical formulations that allow
+            to create a precise calculation of the results that will be obtained so they can be compared
+            with the gain in performance.
+        \end{enumerate}
+    \item Code development
+        \begin{enumerate}
+            \item Source code: source code of the OpenCL application and any other code necessary to
+            compile, execute and test the kernels.
+            \item Exact kernels: source code of the exact kernels used as a base line for the approximate kernels.
+            \item Approximate kernels: source code of the approximate hardware kernels that will be used
+            on the testing phase.
+        \end{enumerate}
+    \item Testing stage
+        \begin{enumerate}
+            \item Results of the exact tests: measurements of performance, precision and energy consumption while
+            testing the exact kernels.
+            \item Results of the approximate tests: measurements of performance, precision and energy consumption while
+            testing the approximate kernels.
+            \item Results documentation: comparison of the results between exact and approximate tests.
+        \end{enumerate}
+    \item Project administration
+        \begin{enumerate}
+            \item Design document: contains the design of every tool developed during the project.
+            \item Meeting minutes: contains all information obtained in the progress and validation
+            meetings.
+            \item Final report: final report of the project with all relevant information that was
+            generated during its course.
+        \end{enumerate}
+    
+\end{enumerate}
 
 \subsection{Limitations}
 
-LIM-01: ​ el estudiante puede movilizarse a Alemania hasta el primero de Agosto debido a trámites de
-visa europea.
+LIM-01: the student must movilize to Germany in order to have less conflicts with the project supervisor.
+Because of the lack of a visa, the time in the european country is limited to 3 months. 
+ 
+LIM-02:​ the student's budget is only 1000 euros during the stay in Germany.
 
-LIM-02:​ el presupuesto del estudiante es de 1000 euros mensuales durante la estadía en Alemania.
+LIM-03: the student must comply with the regulations and limitations of the KIT in regards to international
+students.
 
-LIM-03: el estudiante está atado a las regulaciones y limitaciones de la universidad KIT con los
-estudiantes internacionales.
+LIM-04: no face to face meetings are possible with the advisor teacher due to the geographical location of 
+the student during the project. Every meeting and communication must be done via the internet.
 
-LIM-04: no hay posibilidad de realizar reuniones presenciales con el profesor asesor del proyecto debido a
-la localización del estudiante durante el proyecto. Toda reunión o comunicación se realizará de manera
-remota.
+LIM-05: the project is based on a master thesis developed more than a year before the start of the current
+project. As such, compiling and executing the prior project limits the progress on the current project.
 
 % \subsection{Risks}
 

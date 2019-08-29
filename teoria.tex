@@ -1,6 +1,115 @@
 \chapter{Theoretical framework}
 \label{ch:marco}
 
+\section{Convolutional neural networks}
+
+Here, I talk about CNNs.
+
+Start by defining what a neural network is, what they are used for.
+
+Specify that I am working with Convolutional ones, part of Deep Learning.
+Explain what is convolution and the main CNNs frameworks (tensor, caffe, alex).
+
+Major uses and examples of uses.
+
+%------------------------
+
+A standard neural network consists of many simple, connected processors called neurons,
+each producing a sequence of real-valued activations. Input neurons get activated through 
+sensors perceiving the environment, other neurons get activated through weighted connections from previously
+active neurons.
+Learning is about finding specific weights that make the network exhibit desired behavior,
+such as driving a car. Depending on the problem and how the neurons are connected, such behavior
+may require long causal chains of computational stages, where each stage transforms 
+the aggregate activation of the network. Deep Learning is an area of machine learning that tries to
+replicate this behavior by increasing the number of stages \cite{schmidhuber2015deep}.
+
+
+
+CNNs are part of deep learning, a type of neural networks based on the 
+visual system of mammals \cite{fukushima1980neocognitron}\cite{hubel1968receptive}.
+A CNN is usually comprised of three types of layers: convolution, pooling and 
+fully-connected \cite{karpathy2016cs231n}. A CNN differs from a regular neural network
+by the amount of connected layers and configurations, figure 
+
+southwest of Germany. Figure \ref{fig:mapakit} shows a map with the location of Baden-Württemberg inside the european
+country and the location of Karlsruhe inside the aforementioned state.
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{fig/mapakit.eps}
+    \caption{Map of Germany with Baden-Wüttemberg marked (left) \cite{badenmap} and location of Karlsruhe within the state (right) \cite{karlsmap}}
+    \label{fig:cnn}
+\end{figure}
+
+The use of heterogeneous devices, from general-purpose GPUs to FPGAS, to execute 
+machine learning algorithms and neural networks
+is of big interest in the current world and there are current efforts to bring
+all types of devices together \cite{abadi2016tensorflow}.
+
+
+
+A general example for a deep neural network is
+shown in figure 2.1: The first, left-most layer is the input layer which is connected to the
+first of several hidden layers. In this example, each hidden layer is again connected to one
+successor layer until reaching the final output layer on the far-right side. Consequently,
+each layer is responsible for reading multiple input values, applying an operation on them
+and providing the resulting value to the next layer. For example, during such operations,
+each input value is multiplied with a corresponding weight value which is stored as a layer
+parameter, after which the results are accumulated (multiply-accumulate operation). In fig-
+ure 2.1, this is illustrated as lines of different colors and saturation, representing input/output
+values of lower and higher magnitude. These weight values of neural networks are typically
+learned through algorithms to optimize the network functionality for its designated task.
+
+Additionally, because operations in neural network layers are usually linear combinations, a
+non-linearity called activation function is added after each layer to allow for computation of
+non-trivial problems. Without this non-linear separation of layers, they could be combined
+and reduced to a system of linear functions in a single layer. In such networks, it is not
+possible to implement complex functions like the XOR (exclusive or) logical function [11].
+In recent years, different kinds of neural networks have been proposed, involving different
+types of layers and fields of application in general. For visual applications such as image
+classification and face detection, the class of convolutional neural networks (CNNs) has
+shown superior results and is very prominent today [4, 5, 6]. Based on the research of
+Hubel and Wiesel [12] on the visual cortex, CNNs are created to emulate the processing
+of images in the brain. As with the general deep neural networks described above, CNNs
+consist of several hidden layers surrounded by one input and one output layer. Starting with
+the input image, data is passed to the input layer and processed by each layer of the network.
+
+Each layer receives input data from its predecessor, applies the corresponding operations
+and delivers output to its successor. Ultimately, the output layer contains the classification
+result for the input image. Typically, each layer is either a convolutional, a pooling or an
+inner product (fully connected) layer. However, many methods from literature introduce
+novel techniques and layer types such as local response normalization (LRN) to improve the
+accuracy and performance of their proposed network model [4]. The AlexNet CNN model
+is shown in figure 2.2 and illustrates the application of multiple convolution layers, paired
+with max-pooling and inner product (dense) layers. The most common CNN layer types are
+described in detail in the following paragraphs.
+
+%-----
+
+\section{Approximate computing}
+
+What is approximate computing. What is the problem it is solving and
+how it solves it. Some of the layers for approximate computing.
+
+Approximate computing on hardware definition and algorithms.
+
+Approximate computing on FPGAs.
+
+Approximate computing on CNNs.
+
+\section{\intelOCLnos}
+
+Talk about OpenCL and its main objective. Talk about kernels.
+
+Talk about the specific SDK created by Altera to be used on FPGAs.
+
+Some facts about the precision of it vs writing manual Verilog.
+
+How OpenCL has been used to describe CNNs on FPGA. (Suda, Pipe, other)
+
+Why OpenCL on FPGA vs using a CPU or GPU.
+
+
 \section{Descripción}
 
 Toda tesis hace referencia a trabajos previos en el área y trabajos afines que

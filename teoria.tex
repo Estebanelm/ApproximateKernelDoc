@@ -3,17 +3,6 @@
 
 \section{Convolutional neural networks}
 
-Here, I talk about CNNs.
-
-Start by defining what a neural network is, what they are used for.
-
-Specify that I am working with Convolutional ones, part of Deep Learning.
-Explain what is convolution and the main CNNs frameworks (tensor, caffe, alex).
-
-Major uses and examples of uses.
-
-%------------------------
-
 A standard neural network consists of many simple, connected processors called neurons,
 each producing a sequence of real-valued activations. Input neurons get activated through 
 sensors perceiving the environment, other neurons get activated through weighted connections from previously
@@ -23,454 +12,237 @@ such as driving a car. Depending on the problem and how the neurons are connecte
 may require long causal chains of computational stages, where each stage transforms 
 the aggregate activation of the network. Deep Learning is an area of machine learning that tries to
 replicate this behavior by increasing the number of stages \cite{schmidhuber2015deep}.
-
-
-
-CNNs are part of deep learning, a type of neural networks based on the 
-visual system of mammals \cite{fukushima1980neocognitron}\cite{hubel1968receptive}.
-A CNN is usually comprised of three types of layers: convolution, pooling and 
-fully-connected \cite{karpathy2016cs231n}. A CNN differs from a regular neural network
-by the amount of connected layers and configurations, figure 
-
-southwest of Germany. Figure \ref{fig:mapakit} shows a map with the location of Baden-Württemberg inside the european
-country and the location of Karlsruhe inside the aforementioned state.
+Figure \ref{fig:nnvscnn} shows the difference between regular NNs and deep NNs.
 
 \begin{figure}
-    \includegraphics[width=\linewidth]{fig/mapakit.eps}
-    \caption{Map of Germany with Baden-Wüttemberg marked (left) \cite{badenmap} and location of Karlsruhe within the state (right) \cite{karlsmap}}
-    \label{fig:cnn}
+  \includegraphics[width=\linewidth]{fig/nnvscnn.eps}
+  \caption{Illustration of the difference between a regular neural network and a deep neural network \cite{nielsen2015neural}}
+  \label{fig:nnvscnn}
 \end{figure}
+
+CNNs are part of deep learning, a type of neural network based on the 
+visual system of mammals \cite{fukushima1980neocognitron}\cite{hubel1968receptive}.
+A CNN is usually comprised of three types of layers: convolution, pooling and 
+fully-connected \cite{karpathy2016cs231n}. There could also be normalization and activation phases.
+
+\subsection{Convolution layer}
+
+The most important layer in CNNs, as it represents the main operation done throughout the layers 
+of the network and makes it possible to highlight features of the input image.
+It is based on the convolution operation, defined as such:
+
+\begin{equation} \label{eq:convorig}
+  s(t)
+  =
+  (x*w)(t)
+  =
+  \sum_{a=-\infty}^{\infty} x(a)w(t-a)
+\end{equation}
+
+However, in CNNs the input image and output result are typically multidimensional
+arrays with a defined size, which means that convolution must be implemented
+as a discrete function. Assuming a two-dimensional input I and an applied two-dimensional filter (kernel)
+the resulting operation is defined as following:
+
+\begin{equation} \label{eq:convdiscr}
+  S(i,j)
+  =
+  (K*I)(i,j)
+  =
+  \sum_{m}\sum_{n} I(i-m,i-n)K(m,n)
+\end{equation}
+
+If the kernels are smaller than the input image, each of them will only filter a specific window of the image at a time
+while sliding this window to cover the full image, generating an activation map. Also, because the images are color images,
+the input will be a three-dimensional matrix which can be transformed (flattened and rearranged) and the convolution applied as a matrix multiplication
+following the process found on \cite{suda}.
+
+This sliding window will allow to cover the whole input image by moving a certain number of pixels after every operation, this number is called stride.
+Also, because the filter operates on every pixel of the window and to ensure a proper output size, a border of ceroes could be added to the input
+image with a specific width, called zero-padding \cite{karpathy2016cs231n}. The last parameter to take into account is the amount of kernels to use per layer.
+Another relevant term is a feature map, which is any output of the layers conforming the CNN \cite{Goodfellow-et-al-2016}.
+
+Suda et al. describes the equation that describes the output of a single neuron convolution operation applied to a specific (x,y) position on 
+the input matrix as:
+
+\begin{equation} \label{eq:convsuda}
+  out(f_o,x,y)
+  =
+  \sum_{f_i=0}^{N_{if}}\sum_{k_x=0}^{K}\sum_{k_y}^{K} wt(f_o,f_i,k_x,k_y)in(f_i,x+k_x,y+k_y)
+\end{equation}
+
+Where $out(f_o,x,y)$ and $in(fi,x,y)$ represent the neurons at location
+$(x,y)$ in the feature maps $f_o$ and $f_i$, respectively and 
+$wt(f_o,f_i,k_x,k_y)$ is
+the weights at position $(k_x,k_y)$ that gets convolved with input
+feature map $f_i$ to get the output feature map $f_o$. This is done 
+for all $N_{if}$ input features \cite{suda}.
+
+\subsection{Pooling Layer}
+
+A pooling function replaces the output of the NN at a certain 
+location with a summary of the nearby outputs. For example, 
+the max pooling \cite{zhou1988computation} operation reports the maximum 
+output within a rectangular neighborhood. The objective is to discard
+unnecesary details in the input matrix and preserving the important information.
+
+Just like convolution, a sliding window is used and the pooling
+operation is performed for each movement of the window. This process
+reduces the output size (downsampling) \cite{karpathy2016cs231n}.
+
+\subsection{Fully-connected Layer}
+
+A fully-connected layer is similar to convolution with the difference being
+that a convolution layer are connected only to a local region of the input matrix
+, while a fully-connected one operates over every activation in the previous layer.
+Their objective is to take every feature found by the other layers and classify
+them depending on the objects the CNN is trying to find, that is why they need
+all information gathered by the previous layers. For this reason, fully-connected
+layers are generally found at the end of the neural network architecture.
+
+\subsection{Examples of CNN architectures}
+
+One of the first succesful CNN was LeNet, which was used for number detection
+and classifition on zip codes, digits and more. It consisted of three convolution
+layers, two subsampling layers similar to pooling and one single fully-connected
+layer at the end \cite{lecun1998gradient}.
+
+VGG is another succesful CNN which features up to 16 convolution layers, as well
+as using max-pooling and fully-connected layers \cite{simonyan2014very}. It shows
+that increasing the depth of conventional CNNs is enough to achieve the necessary
+performance needed for large-scale image classification.
+
+One of the most import CNNs developed in recent years is the one developed by 
+Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. Known as AlexNet, it innovated
+by staking convolutional layers and increasing the depth of the CNN \cite{krizhevsky2012imagenet}. 
+This project uses a partially modified version of AlexNet.
+
+%-----
+
+\section{Approximate computing}
+
+Approximate computing is a paradigm that tries to take advantage of the fact that
+many applications can still work properly even with errors being introduced, be them
+manually or by accident. Chippa et al. \cite{chippa2013analysis} show that current world
+applications are error-resilient, meaning that they can withstand the introduction of errors
+while having meaningful outputs.
+
+Approximate computing can be applied to many fields of computer programming and organization stack.
+There can be approximate programming languages that introduce imprecise algorithms, 
+to approximate compilers that generate imprecise but fast machine code.
+There are also approximate computer architectures, going down into approximate memory and hardware that allow for 
+less energy consumption and better performance \cite{surveyqu}.
+
+\subsection{Approximate hardware definition}
+
+Using approximate hardware is a good approach when having access to transistor-level definition.
+There have been efforts that try to design approximate logical units \cite{kim2013energy}\cite{ye2013reconfiguration}
+which could improve the energy levels of existing arithmetic units. But this approach is 
+not viable when working with FPGAs as we can only change the functionality of the hardware
+instead of its electric properties or composition.
+
+For high-level synthesis, introducing errors must be done partially, as not every
+part of the hardware can be imprecise. Some of the most important approaches have been:
+
+\begin{itemize}
+  \item Finding the minimun area under a given error rate constraint. Shin and Gupta
+  show that an error of at least 1\% can lead to reductions of up to 9\% in the area
+  utilized by the design \cite{shin2010approximate}.
+  \item Using an iterative process to improve the synthesis by taking into account
+  the error magnitude \cite{miao2013approximate}.
+  \item SALSA. A methodology to allow for better control of the quality constraints
+  and transforming the approximate hardware synthesis problem into a regular synthesis
+  problem \cite{venkataramani2012salsa}. There is also an extension to it called ASLAN
+  that works for sequential circuits \cite{ranjan2014aslan}.
+  \item Axilog is an extension to Verilog that allows the designer to choose which parts
+  of the design can be approximate or exact \cite{yazdanbakhsh2015axilog}.
+  \item Working on fixed point arithmetic can be analyzed and bitwidth optimizations
+  applied for precise control of the accuracy of the output \cite{li2015joint}.
+\end{itemize}
+
+\subsection{Approximate neural networks}
+
+Agrawal et al. demonstrate that deep neural networks are resilient to numerical errors
+from approximate computing. By removing random computations on the convolution layers 
+and using single-precision floating-point number representation, they achieved an error
+of about 18\% \cite{approximatecomp}.
+
+Moreau et al. created a neural accelerator, called SNNAP, that approximates the filter functions and
+communications between each component within a FPGA-based application \cite{moreau2015snnap}. This can be used
+to generate approximate kernels adapting the SNNAP replacements to OpenCL and the neural network
+definition.
+
+Another technique is the use of fixed-point arithmetic with less bitwidth for the data being
+computed inside the neural network. Wang et al. showed that a neural network can be 
+trained using 8-bit floating point numbers without reduced accuracy on the final result \cite{wang2018training}.
+Using fixed-point arithmetic on different layers could be used to change the precision of
+each of the layers, adjusting them and experimenting to obtain the best results energywise
+while trying to maintain an accepted output.
+
+Most of the current CNNs in use have a lot of layers for fine tuning the output classification.
+Simonyan presents various CNN models with different number of layers, finally setting for
+16 convolution layers and 3 fully-connected layers \cite{simonyan2014very}. Looking at the 
+results, the other configurations with less layers could be used in order to improve performance,
+reduce implementation area and reduce energy consumption, while the error is only
+reduced a little after many layers are included.
+
+\subsection{Aproximate FPGA implementations}
+
+Lopes et al. explore the opportunities to explore on playing with the number of iterations
+on FPGA computations \cite{roldao2009more}. By using iterative solutions to linear systems, one can adjust the
+final precision of each calculation and the accuracy by executing less or more iterations.
+This can be used in conjunction with the operations defined by the neural network kernels 
+to finely control the precision of each layer or the whole network.
+
+As already mentioned, Moreau's neural accelerator can be used to approximate functions implemented
+on FPGAs. This approach allows to create an specific implementation that does not interfere
+with other techniques. There is also the framework introduced by Sampson \cite{sampson2015accept},
+which enables programmers to manually adjust the approximation while providing automation
+for the process. Sampson showed good results using the framework on a SoC with an FPGA as an
+approximate accelerator.
+
+There can also be optimization on the arithmetic operations defined on each of the functions
+to be run on the FPGA. Approximate multipliers can be used to accelerate the performance
+of matrix multiplications, convolution and other operations that use multiplications
+\cite{ullah2018smapproxlib}. This can be improved upon by ways of memoization, a technique
+that stores a cache for expensive calculations and returns this cache whenever those
+calculations are repeated. Using memoization has already been proved to work on FPGA
+implementations \cite{sinha2016low} and, while it comes with a small cost on area, it can be used to speed
+up calculations by large amounts.
+
+\section{\intelOCLnos}
 
 The use of heterogeneous devices, from general-purpose GPUs to FPGAS, to execute 
 machine learning algorithms and neural networks
 is of big interest in the current world and there are current efforts to bring
 all types of devices together \cite{abadi2016tensorflow}.
 
-
-
-A general example for a deep neural network is
-shown in figure 2.1: The first, left-most layer is the input layer which is connected to the
-first of several hidden layers. In this example, each hidden layer is again connected to one
-successor layer until reaching the final output layer on the far-right side. Consequently,
-each layer is responsible for reading multiple input values, applying an operation on them
-and providing the resulting value to the next layer. For example, during such operations,
-each input value is multiplied with a corresponding weight value which is stored as a layer
-parameter, after which the results are accumulated (multiply-accumulate operation). In fig-
-ure 2.1, this is illustrated as lines of different colors and saturation, representing input/output
-values of lower and higher magnitude. These weight values of neural networks are typically
-learned through algorithms to optimize the network functionality for its designated task.
-
-Additionally, because operations in neural network layers are usually linear combinations, a
-non-linearity called activation function is added after each layer to allow for computation of
-non-trivial problems. Without this non-linear separation of layers, they could be combined
-and reduced to a system of linear functions in a single layer. In such networks, it is not
-possible to implement complex functions like the XOR (exclusive or) logical function [11].
-In recent years, different kinds of neural networks have been proposed, involving different
-types of layers and fields of application in general. For visual applications such as image
-classification and face detection, the class of convolutional neural networks (CNNs) has
-shown superior results and is very prominent today [4, 5, 6]. Based on the research of
-Hubel and Wiesel [12] on the visual cortex, CNNs are created to emulate the processing
-of images in the brain. As with the general deep neural networks described above, CNNs
-consist of several hidden layers surrounded by one input and one output layer. Starting with
-the input image, data is passed to the input layer and processed by each layer of the network.
-
-Each layer receives input data from its predecessor, applies the corresponding operations
-and delivers output to its successor. Ultimately, the output layer contains the classification
-result for the input image. Typically, each layer is either a convolutional, a pooling or an
-inner product (fully connected) layer. However, many methods from literature introduce
-novel techniques and layer types such as local response normalization (LRN) to improve the
-accuracy and performance of their proposed network model [4]. The AlexNet CNN model
-is shown in figure 2.2 and illustrates the application of multiple convolution layers, paired
-with max-pooling and inner product (dense) layers. The most common CNN layer types are
-described in detail in the following paragraphs.
-
-%-----
-
-\section{Approximate computing}
-
-What is approximate computing. What is the problem it is solving and
-how it solves it. Some of the layers for approximate computing.
-
-Approximate computing on hardware definition and algorithms.
-
-Approximate computing on FPGAs.
-
-Approximate computing on CNNs.
-
-\section{\intelOCLnos}
-
-Talk about OpenCL and its main objective. Talk about kernels.
-
-Talk about the specific SDK created by Altera to be used on FPGAs.
-
-Some facts about the precision of it vs writing manual Verilog.
-
-How OpenCL has been used to describe CNNs on FPGA. (Suda, Pipe, other)
-
-Why OpenCL on FPGA vs using a CPU or GPU.
-
-
-\section{Descripción}
-
-Toda tesis hace referencia a trabajos previos en el área y trabajos afines que
-están directamente relacionados con lo planteado en el tesis.
-
-Además, en el marco teórico debe aparecer la información absolutamente
-necesaria para comprender la solución, y por eso es recomendable escribir
-primero la solución (el siguiente capítulo), para ir anotando qué debe ser
-explicado en el marco teórico.
-
-\section{Generalidades}
-
-Se recomienda revisar las guías de publicación de la \nt{IEEE} en
-\url{http://www.ieee.org/publications_standards/publications/authors/authors_journals.html},
-donde puede encontrar cómo hacer referencias bibliográficas correctamente, cómo
-citar ecuaciones, tablas y figuras, etc.  
-
-\subsection{Redacción}
-
-La \nt{redacción} en todo el documento debe seguir un estilo científico
-objetivo. Esto implica que se redacta de modo impersonal, sin utilizar primeras
-personas del singular o del plural, y se evita el uso de cualquier tipo de
-calificativo, sustituyéndolos siempre por datos concretos, vinculados a
-referencias bibliográficas o datos experimentales. Los comparativos también
-deben concretarse a hechos y datos, y nunca dejarse ``en el aire''. Por la
-naturaleza de la tesis, el tiempo verbal es usualmente presente, no perdiendo
-nunca de vista que se está explicando ``cómo hacer algo'', en vez de ``qué se
-hizo''.
-
-Las \nt{frases} deben ser cortas, y debe evitarse que el lector tenga que saltar
-constantemente entre partes de la tesis, lo que implica una exposición lineal
-clara, donde lo que se necesita ya ha sido explicado antes. Deben evitarse
-redundancias y por tanto cada concepto se exponen en un único lugar.
-
-Todo aspecto circunstancial es irrelevante para la tesis, es decir, si se ha
-desarrollado en el laboratorio $X$, o en el curso $Y$, con el profesor $Z$, o
-en la empresa $W$, el nombre de funciones o clases en su código, etc., es
-información irrelevante para reproducir el experimento, y por lo tanto sobra.
-%
-Esa información puede incluirse en uno de los anexos.
-
-
-\subsubsection{Numeración del documento}
-
-La primera página de la tesis es la correspondiente a la introducción,
-así que ésta debe ser la página 1. Desde la introducción, hasta antes
-de la bibliografía, las unidades son ``Capítulos''. La bibliografía y
-anexos no se consideran capítulos, así que ya no continúan con la
-misma numeración de los capítulos (la paginación sí continua). Los
-índices, notación, glosario, etc.\ se numeran con números romanos en
-versalitas ({\textsc{I}, \textsc{II}, \textsc{III}, \textsc{IV},
-  \textsc{V}, \textsc{VI}}$\ldots$) y antes del índice (portada,
-resúmenes, agradecimientos, hoja de evaluadores, etc.) las páginas no
-llevan numeración.
-
-Esta plantilla LaTeX ya se ocupa de todo lo anterior.
-
-\subsection{Ecuaciones}
-
-Para citar \nt{ecuaciones} se utilizan paréntesis redondos, y no es
-necesario emplear explícitamente la palabra ``ecuación''. Por ejemplo
-``Introduciendo en (4.2) los resultados de (3.3) y (3.7) se obtiene
-...''. La ecuación es parte del flujo de texto y no un objeto
-flotante, así que no pueden emplearse como figuras. Cuando se requiere
-la ecuación, allí se inserta.
-
-Es incorrecto redactar de la siguiente forma: \explain{MAL}
-
-\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-  dada por (\ref{eq:ej1}), donde el parámetro $\kappa$ está dado por
-  (\ref{eq:ej2}).}
-
-\begin{equation} \label{eq:ej1}
-  I_{DS}
-  =
-  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-  \left[
-    e^{-\frac{V_{SB}}{v_t}}
-    -
-    e^{-\frac{V_{DB}}{v_t}}
-  \right]
-\end{equation}
-
-\begin{equation} \label{eq:ej2}
-  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-\end{equation}
-
-Lo anterior es incorrecto porque obliga al lector a estar buscando ecuaciones,
-que pueden mostrarse directamente.  La única referenciación permitida es hacia
-atrás.
-
-La forma correcta de redactar lo anterior es: \chk{BIEN}
-
-\textsl{La operación del transistor sin tomar en cuenta el efecto Early está
-  dada por}
-\begin{equation} \label{eq:ej3}
-  I_{DS}
-  =
-  I_{n0} \frac{W}{L}e^{\kappa \frac{V_{GB}}{v_t}}
-  \left[
-    e^{-\frac{V_{SB}}{v_t}}
-    -
-    e^{-\frac{V_{DB}}{v_t}}
-  \right]
-\end{equation}
-\textsl{donde el parámetro $\kappa$ es}
-\begin{equation} \label{eq:ej4}
-  \kappa = \frac{C_{ox}}{C_{ox}+C_{dep}}
-\end{equation}
-
-Así el flujo del texto guía al lector por las ecuaciones sin mayor esfuerzo.
-
-Es recomendable numerar \emph{todas} las ecuaciones, de modo que en la revisión
-del documento, o en futuras referencias a su documento de tesis todas las
-ecuaciones puedan ser citadas sin requerir describir textualmente a cuál
-ecuación se está haciendo referencia.
-
-Es preferible utilizar coma decimal en vez de punto decimal, debido a
-que es el estándar internacional.  El Diccionario panhispánico de
-dudas aclara que se acepta el punto como separador decimal, pero eso
-no quiere decir que sea preferible.  Esta plantilla ya incorpora el
-uso del paquete de \LaTeX\ \code{icomma}, que se encarga de realizar
-el espaciado correcto de la coma.  Cuando utilice coma como signo de
-puntuación, deje un espacio posterior, para asegurarse de que
-\code{icomma} no lo tome como separador decimal.
-
-\begin{equation}
-  \label{eq:normrnd}
-  h(x)=\norm{\rand()-0,5}^2_2
-\end{equation}
-
-\subsection{Figuras}
-
-Para el almacenamiento de imágenes existen dos tipos de formato: las imágenes
-raster y las imágenes vectoriales.\index{imagen!raster}
-
-\subsubsection{Imágenes raster}
-
-Las imágenes raster son representadas por una rejilla de píxeles, en donde cada
-píxel tiene un valor que representa al nivel de gris o el color. La
-discretización espacial es ineludible, y la única forma de obtener buena
-calidad es empleando tamaños grandes de la imagen que conduzcan a resoluciones
-de al menos 300 puntos por pulgada en la impresión, lo que conlleva a archivos
-de documentos de varios megabytes. Dentro de los formatos para almacenar
-imágenes raster existen algunos con pérdida (como el JPEG) que producen en
-imágenes sintéticas, como diagramas, estructuras ruidosas que dan una
-apariencia de baja calidad a las figuras. Otros formatos (como PNG, BMP, TIFF o
-GIF) no tiene pérdidas de información, pero los algoritmos de compresión no
-pueden reducir el tamaño de las imágenes con los mismos factores de reducción
-que los formatos con pérdidas. Este tipo de formatos debe utilizarse únicamente
-para fotografías o capturas de escenas reales con cámaras digitales.
-
-\subsubsection{Imágenes vectoriales}
-
-\index{imagen!vectorial}
-Las imágenes vectoriales \textbf{deben} ser empleadas en todo tipo de
-diagrama. En ellas no se almacenan píxeles, sino las estructuras geométricas
-que componen la figura como círculos (representado por posicion de su centro y
-su radio), rectángulos (representados por sus esquinas), líneas, texto, etc. La
-mayoría de programas para elaborar este tipo de diagramas, como Inkscape, XFig,
-OpenOffice.org Draw, MS Visio, Adobe Illustrator, etc. proveen varios formatos
-vectoriales que pueden ser insertados tanto en LaTeX como en OpenOffice.org
-Writer (o MS Word). Los formatos más empleados son los llamados metafiles, que
-incluyen al WMF, EMF. En LaTeX se utiliza por lo general EPS. Recientemente se
-ha incrementado el soporte al formato SVG.
-
-No debe cometerse el error de generar una imagen vectorial a partir de una
-imagen raster, pues una vez realizada la discretización espacial no es posible
-reconstruir los elementos geométricos que componen la imagen. Por ello, no
-tiene ningún sentido generar un archivo EPS o WMF a partir de una imagen ya
-almacenada en BMP, JPG, o PNG, pues lo único que ocurrirá es que se inserta la
-figura raster tal cual en la imagen vectorial, sin implicar ninguna ganancia en
-la calidad.
-
-Esta plantilla de LaTeX administra la generación de ciertas figuras por usted.
-Puede colocar en el directorio \texttt{fig/} archivos EPS, JPG, PNG o GP (de
-GNUPlot) y el Makefile se encarga de hacer todas las conversiones necesarias.
-En las siguientes subsecciones se describen dos casos adicionales que resultan
-útiles para realizar figuras más complejas.
-
-\subsubsection{Figuras tikz}
-\index{tikz}
-
-Esta plantilla compila archivos con código en Tikz para generar
-figuras.
-%
-En realidad, lo único que hace el Makefile es compilar con
-\code{pdflatex} cualquier archivo \texttt{fig/*.tikz} y dejar el
-resultado en el directorio de figuras, aunque el concepto fue pensado
-particularmente para generar imágenes vectoriales utilizando las
-características de Tikz, biblioteca de LaTeX que es utilizada cada vez
-más por su enorme flexibilidad.
-%
-\begin{figure}[htb]
-  \centering
-  \includegraphics{figtemplate}
-  \caption[Ejemplo de figura con tikz]{Ejemplo realizado con
-    \texttt{tikz}.  Usted encuentra la plantilla en el directorio de
-    figuras bajo el nombre \texttt{fig/figtemplate.tikz}.}
-  \label{fig:figtemplate}
-\end{figure}
-
-La figura~\ref{fig:figtemplate} muestra un ejemplo que se puede
-utilizar como plantilla para generar figuras \texttt{tikz}.  La
-plantilla la encuentra en el directorio de figuras y se llama
-\code{figtemplate.tikz}.
-
-
-\subsubsection{Figuras ltxfig/psfrag}
-
-\index{psfrag}\index{ltxfig}
-Cuando en el subdirectorio \texttt{fig/} se encuentran dos archivos con el
-mismo nombre pero extensiones \texttt{ltxfig} y \texttt{psfrag}, por ejemplo
-\texttt{prueba.ltxfig} y \texttt{prueba.psfrag}, entonces el Makefile asume que
-usted desea crear una figura a partir del archivo \texttt{prueba.ltxfig},
-creado con el programa \texttt{XFig}, sustituyendo los textos ahí presentes con
-texto formateado con LaTeX.
-
-La figura~\ref{fig:ltxfig} ha sido creada con este esquema.  Revise los
-archivos correspondientes en el directorio de figuras
-\texttt{fig/ltxfig\_prototipo.*} para más detalles sobre su uso.
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.9\textwidth]{ltxfig_prototipo}
-  \caption{Ejemplo de imagen ltxfig/psfrag}
-  \label{fig:ltxfig}
-\end{figure}
-
-\subsubsection{Figuras pstricks}  
-
-\index{pstricks}
-Los archivos con extensión \texttt{.pstricks} en el directorio \texttt{fig} se
-utilizan para generar cualquier tipo de imágenes según el código que se
-contenga.  Es un concepto más general que el anterior.  La
-figura~\ref{fig:pstricks} ha sido creada con este esquema.  Puede revisar los
-archivos \texttt{prototipo\_gnuplot*} como un ejemplo de su uso, en donde de un
-archivo gnuplot (\texttt{\_.gp}) se genera un archivo \texttt{\_.eps}, el cual
-es incluido en el archivo \texttt{.pstricks} sustituyendo cadenas de texto por
-código LaTeX.
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics{prototipo_gnuplot}
-  \caption{Ejemplo de imagen gnuplot/pstricks}
-  \label{fig:pstricks}
-\end{figure}
-
-
-
-\subsubsection{Entradas en el índice de figuras}
-
-El índice de figuras debe servir para encontrar rápidamente dónde se
-encuentra cierta figura.  El pie de la figura, indicado en \LaTeX con
-\texttt{caption} puede ser extenso, en especial para indicar detalles
-de las figura, y es la entrada por defecto que aparecerá en el índice
-de figuras, la cual no debe superar la extensión de una línea y debe
-únicamente dar la idea del contenido de la figura para poder ser
-encontrada.  Para lograr esto en \LaTeX{} se agrega un parámetro
-opcional con el texto del índice de la siguiente forma:
-\begin{verbatim}
-  \caption[Texto en el índice]{Texto al pie de la figura}
-\end{verbatim}
-
-\subsection{Referencias bibliográficas}
-
-\index{referencias}\index{BibTeX}
-Todo concepto o idea tomado de otros autores contar con la respectiva
-referencia. En redacción técnica de ingeniería rara vez se utiliza la cita
-textual, así que es necesario reformular las ideas y conceptos con palabras
-propias. En ingeniería electrónica se utilizan los formatos de referencia de la
-IEEE o la ACM, que son numéricos, encerrados entre paréntesis cuadrados (por
-ejemplo, ``En \cite{Davis1963} se propuso un nuevo algoritmo'', o ``En
-\cite{ProakisManolakis1998} los autores proponen tomar las ventajas de los
-algorimos presentados en \cite{Oppenheim1998,Roberts2005,Haykin2001} por medio
-del método de Newton \cite{Burrus1998} conocido en el área de optimización
-lineal.''). La referencia es parte de las frases, así que si la frase termina
-con la referencia para indicar la idea, ésta debe estar antes del punto final o
-demás signos de puntuación: ``La capacidad de memoria también sigue una Ley
-similar a la de Moore \cite{Octave}. Los siguientes son los aspectos a tomar en
-cuenta en el diseño del sistema \cite{Lindner2002}:''
-
-Se recomienda utilizar BibTeX para indicar las referencias
-bibliográficas.  Actualmente herramientas como Mendeley, Zotero u
-otras similares simplifican la administración de las referencias y
-pueden exportar al formato BibTeX.
-
-\subsection{Extensión}
-
-\index{extensión}
-Una tesis de licenciatura no debe sobrepasar las 120 páginas incluyendo
-apéndices y los formalismos desde portada hasta índices.
-
-El cuerpo de la tesis (desde introducción hasta conclusiones) usualmente se
-extiende desde 45 páginas hasta no más de 80, dependiendo de la problemática
-tratada.
-
-No es necesario reproducir contenidos de otras fuentes: agregue las referencias
-a dichas fuentes, y limítese a enunciar lo estrictamente necesario para
-comprender sus propuestas de solución.
-
-\section{Sobre esta plantilla \LaTeX}
-
-Esta plantilla \LaTeX pretende simplificar varios pasos en la creación del
-documento de tesis.
-
-\subsection{Marcar asuntos pendientes}
-
-La plantilla tiene dos ``\emph{modos}'' de operación: normal y borrador
-(\emph{draft}).  En el archivo \texttt{main.tex} a partir de la línea 41 usted
-encuentra el código
-
-\begin{verbatim}
-%
-% DRAFT MODE
-%
-\newboolean{draftmode}                  % boolean used to control draft-mode
-% Ensure that only one of the next two lines is active:
-\setboolean{draftmode}{true}            % turn draft mode on
-%\setboolean{draftmode}{false}           % turn draft mode off
-\end{verbatim}
-
-Con el modo borrador, se activan ciertos comandos y funcionalidades útiles en
-el proceso de elaboración de la tesis, pero que deben ser desactivados al
-final, antes de entregar la tesis.  Por ejemplo, se activa el pie de página que
-dice ``\emph{Borrador: fecha}'', y se activa el índice titulado ``Revisar''.  En dicho índice aparecen las páginas en donde se hayan utilizado alguno de los siguientes comandos:
-\begin{compactitem}
-\item \verb+\boxcomment{comentario}+ Crea una caja en el margen de página con
-  el comentario indicado.
-\item \verb+\explain{comentario}+ Crea una caja en el margen de página con
-  el comentario indicado, con una flecha hacia la derecha para indicar qué en
-  concreto debe ser revisado.
-\item \verb+\chk{comentario}+ Crea una caja en el margen con símbolo de
-  ``chequeado'' y el comentario indicado.
-\item \verb+\TODO{comentario}+ Crea una caja grande de fondo sombreado con el
-  comentario indicado.
-\end{compactitem}
-
-En este párrafo se\chk{resultado de chk} utilizan algunos de estos comandos
-para ilustrar su efecto.  El \verb+\chk+ como puede observar tiene sentido
-usarlo para marcar que algo está casi listo.  Por otro lado \explain{explain}
-el comando \verb+\explain+ permite marcar algo que requiere ser revisado en
-redacción, valores, etc.  El \verb+\boxcomment+\boxcomment{La caja simple}
-solo pone una marca al margen.
-
-\TODO{Finalmente el comando \texttt{TODO} coloca esta caja gris.}
-
-Si usted desativa el modo draft, desaparecen todas las marcas
-anteriores, y desaparece el índice ``Revisar''.  En éste índice
-aparecen todas las páginas en donde se utilizaron estos comandos con
-los respectivos comentarios, lo que permite encontrar rápidamente
-detalles que usted indicó que debe revisar.
-
-\subsection{Índices}
-
-Como índice se conoce la lista de términos claves con su respectiva
-página.  Usualmente aparece al final del documento.  La plantilla
-ofrece varios comandos para simplificar el uso estandar del comando de
-\LaTeX\ \verb+\index{termino}+ que coloca al término indicado en el
-índice.  Con \verb+\nt[indice]{termino}+ (\emph{new term}) usted
-indica la entrada principal del término, que aparece en el texto en el
-índice, es decir, en el índice aparece lo que indique en vez de
-``indice'' y en el texto aparece lo que indique ``termino'';
-\verb+\ot{termino}+ agrega una entrada secundaria al término.
+OpenCL is a framework developed by Apple Inc. that allows for a seamless
+programming experience for heterogeneous devices. OpenCL is based on 
+the C++ 14, including most constructs from C++ in order to work as a
+clone of it. This allows high-level programmers to develop applications
+that can be run on different platforms without having to create new code
+for any new platform.
+
+\intelOCLnos is a development environment that allows the creation of
+synthesizable kernels, blocks of code that can be executed within the FPGA.
+Because of the high-level focus of OpenCL, it can be used to design in short
+time big application such as CNNs. As for its effectiveness, it has been
+demonstrated that using OpenCL instead of low-level languages such as Verilog
+does not yield bad performance results, at the cost of a little more memory
+usage \cite{abdelfattah2014gzip}.
+
+Suda et al. \cite{suda} implement an FPGA accelerator for CNNs. They take advantage
+of the parallelism offered by OpenCL in order to set vectorization and 
+loop unrolling factors as to have better control of the actual implementation
+on the FPGA. Also, Suda's implementation applies convolution using
+matrix multiplication, achieving good performance on these layers. Suda
+uses AlexNet and VGG to benchmark its results, finding that it can be
+significantly better than the CPU time.
+
+Wang et al. \cite{pipecnn} created a reconfigurable accelerator for CNNs
+based on OpenCL. This implementation features OpenCL's extended channel support 
+on FPGAs enabling communication between layers without using onboard memory, allowing
+for reduced memory usage and faster communication between layers.
+This work demonstrates high performance and shows the low energy consumption
+of FPGAs. It also uses AlexNet and VGG to get its results.

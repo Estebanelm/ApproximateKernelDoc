@@ -1,3 +1,4 @@
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Author:  Pablo Alvarado
 %
@@ -22,6 +23,30 @@
 \usepackage[utf8]{inputenc}
 \usepackage{ifthen}                     % provide if-then-else operators
 \usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{listings}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{white},   commentstyle=\color{codegreen},
+  keywordstyle=\color{purple},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=1
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
 % \addbibresource{references.bib}
 
 % --------------------------------------------------------------------------
@@ -88,7 +113,7 @@
   \pagenumbering{alph}
   % fix some terms not activated due to the bug of hyperref with spanish.
   \renewcommand{\tablename}{Table}
-  \renewcommand{\listtablename}{\'Table index}
+  \renewcommand{\listtablename}{Table index}
   \renewcommand{\examplesolution}{Solution}
   \pagestyle{empty}
 
@@ -155,7 +180,7 @@
   % Main files
   \include{intro}
   \include{teoria}
-  \include{solucion}
+  \include{methodology}
   \include{resultados}
   \include{conclusiones}
 

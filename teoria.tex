@@ -7,6 +7,7 @@ A standard neural network consists of many simple, connected processors called n
 each producing a sequence of real-valued activations. Input neurons get activated through 
 sensors perceiving the environment, other neurons get activated through weighted connections from previously
 active neurons.
+
 Learning is about finding specific weights that make the network exhibit desired behavior,
 such as driving a car. Depending on the problem and how the neurons are connected, such behavior
 may require long causal chains of computational stages, where each stage transforms 
@@ -52,17 +53,20 @@ the resulting operation is defined as following:
   \sum_{m}\sum_{n} I(i-m,i-n)K(m,n)
 \end{equation}
 
-If the kernels are smaller than the input image, each of them will only filter a specific window of the image at a time
-while sliding this window to cover the full image, generating an activation map. Also, because the images are color images,
-the input will be a three-dimensional matrix which can be transformed (flattened and rearranged) and the convolution applied as a matrix multiplication
+If the kernels are smaller than the input image, each of them will only filter a 
+specific window of the image at a time
+while sliding this window to cover the full image, generating an activation map. 
+Also, because the images are color images,
+the input will be a three-dimensional matrix which can be transformed (flattened 
+and rearranged) and processed as a matrix multiplication
 following the process found on \cite{suda}.
 
 This sliding window will allow to cover the whole input image by moving a certain number of pixels after every operation, this number is called stride.
-Also, because the filter operates on every pixel of the window and to ensure a proper output size, a border of ceroes could be added to the input
-image with a specific width, called zero-padding \cite{karpathy2016cs231n}. The last parameter to take into account is the amount of kernels to use per layer.
+Also, because the filter operates on every pixel of the window and to ensure a proper output size, a border of ceros could be added to the input
+image with a specific width, called zero-padding \cite{karpathy2016cs231n}. The last parameter to take into account is the number of kernels to use per layer.
 Another relevant term is a feature map, which is any output of the layers conforming the CNN \cite{Goodfellow-et-al-2016}.
 
-Suda et al. describes the equation that describes the output of a single neuron convolution operation applied to a specific (x,y) position on 
+Suda et al. define the equation that describes the output of a single neuron convolution operation applied to a specific (x,y) position on 
 the input matrix as:
 
 \begin{equation} \label{eq:convsuda}
@@ -73,7 +77,7 @@ the input matrix as:
 
 Where $out(f_o,x,y)$ and $in(fi,x,y)$ represent the neurons at location
 $(x,y)$ in the feature maps $f_o$ and $f_i$, respectively and 
-$wt(f_o,f_i,k_x,k_y)$ is
+$wt(f_o,f_i,k_x,k_y)$ are
 the weights at position $(k_x,k_y)$ that gets convolved with input
 feature map $f_i$ to get the output feature map $f_o$. This is done 
 for all $N_{if}$ input features \cite{suda}.
@@ -84,7 +88,7 @@ A pooling function replaces the output of the NN at a certain
 location with a summary of the nearby outputs. For example, 
 the max pooling \cite{zhou1988computation} operation reports the maximum 
 output within a rectangular neighborhood. The objective is to discard
-unnecesary details in the input matrix and preserving the important information.
+unnecessary details in the input matrix and preserving the important information.
 
 Just like convolution, a sliding window is used and the pooling
 operation is performed for each movement of the window. This process
@@ -93,28 +97,48 @@ reduces the output size (downsampling) \cite{karpathy2016cs231n}.
 \subsection{Fully-connected Layer}
 
 A fully-connected layer is similar to convolution with the difference being
-that a convolution layer are connected only to a local region of the input matrix
-, while a fully-connected one operates over every activation in the previous layer.
+that a convolution layer is connected only to a local region of the input matrix, 
+while a fully-connected one operates over every activation in the previous layer.
 Their objective is to take every feature found by the other layers and classify
 them depending on the objects the CNN is trying to find, that is why they need
 all information gathered by the previous layers. For this reason, fully-connected
 layers are generally found at the end of the neural network architecture.
 
+\subsection{Normalization}\label{theorylrn}
+
+A normalization layer is common in CNN implementations to speed up convergence, accelerating
+the process of getting the correct answer when training and evaluating.
+A common form of normalization is local response normalization (LRN), defined
+using the equation \ref{eq:lrnalex}, found on Krizhevsky's paper \cite{krizhevsky2012imagenet}.
+
+\begin{equation} \label{eq:lrnalex}
+  out(f_o,x,y)
+  =
+  \frac{in(f_o,x,y)}
+  {\left(k+\alpha\sum_{f_i=max(0,i-n/2)}^{min(N-1,i+n/2)}in^2(f_i,x,y)\right)^\beta}
+\end{equation}
+
+$\alpha$, $\beta$, {\textit{k}}
+and \textit{n}
+are constants determined by a validation set,
+while \textit{N}
+is the amount of neurons per layer.
+
 \subsection{Examples of CNN architectures}
 
-One of the first succesful CNN was LeNet, which was used for number detection
-and classifition on zip codes, digits and more. It consisted of three convolution
+One of the first successful CNN was LeNet, which was used for number detection
+and classification on zip codes, digits and more. It consisted of three convolution
 layers, two subsampling layers similar to pooling and one single fully-connected
 layer at the end \cite{lecun1998gradient}.
 
-VGG is another succesful CNN which features up to 16 convolution layers, as well
+VGG is another successful CNN which features up to 16 convolution layers, as well
 as using max-pooling and fully-connected layers \cite{simonyan2014very}. It shows
 that increasing the depth of conventional CNNs is enough to achieve the necessary
 performance needed for large-scale image classification.
 
 One of the most import CNNs developed in recent years is the one developed by 
 Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. Known as AlexNet, it innovated
-by staking convolutional layers and increasing the depth of the CNN \cite{krizhevsky2012imagenet}. 
+by stacking convolutional layers and increasing the depth of the CNN \cite{krizhevsky2012imagenet}. 
 This project uses a partially modified version of AlexNet.
 
 %-----
@@ -145,7 +169,7 @@ For high-level synthesis, introducing errors must be done partially, as not ever
 part of the hardware can be imprecise. Some of the most important approaches have been:
 
 \begin{itemize}
-  \item Finding the minimun area under a given error rate constraint. Shin and Gupta
+  \item Finding the minimum area under a given error rate constraint. Shin and Gupta
   show that an error of at least 1\% can lead to reductions of up to 9\% in the area
   utilized by the design \cite{shin2010approximate}.
   \item Using an iterative process to improve the synthesis by taking into account
@@ -162,7 +186,7 @@ part of the hardware can be imprecise. Some of the most important approaches hav
 
 \subsection{Approximate neural networks}
 
-Agrawal et al. demonstrate that deep neural networks are resilient to numerical errors
+Agrawal et al. demonstrate that DNNs are resilient to numerical errors
 from approximate computing. By removing random computations on the convolution layers 
 and using single-precision floating-point number representation, they achieved an error
 of about 18\% \cite{approximatecomp}.
@@ -179,23 +203,24 @@ Using fixed-point arithmetic on different layers could be used to change the pre
 each of the layers, adjusting them and experimenting to obtain the best results energywise
 while trying to maintain an accepted output.
 
-Most of the current CNNs in use have a lot of layers for fine tuning the output classification.
+Most of the current CNNs have a lot of layers for fine tuning the output classification.
 Simonyan presents various CNN models with different number of layers, finally setting for
 16 convolution layers and 3 fully-connected layers \cite{simonyan2014very}. Looking at the 
 results, the other configurations with less layers could be used in order to improve performance,
 reduce implementation area and reduce energy consumption, while the error is only
 reduced a little after many layers are included.
 
-\subsection{Aproximate FPGA implementations}
+\subsection{Approximate FPGA implementations}
 
 Lopes et al. explore the opportunities to explore on playing with the number of iterations
-on FPGA computations \cite{roldao2009more}. By using iterative solutions to linear systems, one can adjust the
-final precision of each calculation and the accuracy by executing less or more iterations.
+on FPGA computations \cite{roldao2009more}. By using iterative solutions to linear systems, 
+the final precision of each calculation and the accuracy can 
+be adjusted by executing less or more iterations.
 This can be used in conjunction with the operations defined by the neural network kernels 
 to finely control the precision of each layer or the whole network.
 
 As already mentioned, Moreau's neural accelerator can be used to approximate functions implemented
-on FPGAs. This approach allows to create an specific implementation that does not interfere
+on FPGAs. This approach allows to create a specific implementation that does not interfere
 with other techniques. There is also the framework introduced by Sampson \cite{sampson2015accept},
 which enables programmers to manually adjust the approximation while providing automation
 for the process. Sampson showed good results using the framework on a SoC with an FPGA as an
@@ -214,8 +239,9 @@ up calculations by large amounts.
 
 The use of heterogeneous devices, from general-purpose GPUs to FPGAS, to execute 
 machine learning algorithms and neural networks
-is of big interest in the current world and there are current efforts to bring
-all types of devices together \cite{abadi2016tensorflow}.
+is of big interest in the current world. There are current efforts to bring
+all types of devices together by taking
+advantage of each device strengths \cite{abadi2016tensorflow}.
 
 OpenCL is a framework developed by Apple Inc. that allows for a seamless
 programming experience for heterogeneous devices. OpenCL is based on 
@@ -231,6 +257,12 @@ time big application such as CNNs. As for its effectiveness, it has been
 demonstrated that using OpenCL instead of low-level languages such as Verilog
 does not yield bad performance results, at the cost of a little more memory
 usage \cite{abdelfattah2014gzip}.
+
+OpenCL requires two different pieces of code: a host code and a device code. The
+host code is in charge of determining the device on which the main computation is
+going to run, prepare the data to be processed and, in the case of FPGAs, run the 
+programming process in order to start the execution. The device code is the
+code that is programmed into the FPGA and represents the hardware execution process.
 
 Suda et al. \cite{suda} implement an FPGA accelerator for CNNs. They take advantage
 of the parallelism offered by OpenCL in order to set vectorization and 

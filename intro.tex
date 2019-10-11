@@ -14,28 +14,29 @@ offered speeds far superior than what a human could manage on specific activitie
 was limited to relatively low data processing. 
 
 In the current era of increasingly advanced semiconductor technologies, a need for using computers 
-with applications for high level data processing has risen, along with higher amount of data to process.
-This has generated a race for maintaining high performance along with equal or even reduced 
+with applications for high-level data processing has risen along with higher amounts of data to process.
+This has generated a race for maintaining high performance while keeping equal or even reduced 
 energy, time and storage consumption. The main solution, for some years, has been to increase the 
-computing power of the computers via mechanisms such as, for example, increasing the amount of transistors
+computing power of the computers via mechanisms such as, for example, increasing the number of transistors
 per area. This solution, however, has brought with it a lot of considerations and problems, specially 
 regarding energy consumption.
 
 A new approach has surfaced as one of the solutions to the energy consumption problem is, approximate computing.
 This computing paradigm was born on the assumption that there are cases on which an exact result, with high precision,
-is not needed. A lot of data come from inexact (sensors, readings) or do not require a precise processing
-algorithm (machine learning, user recommendation programs, statistics). This type of applications are
+is not needed. A lot of data comes from inexact sources (sensors, readings) or do not require a precise processing
+algorithm (machine learning, user recommendation programs, statistics). This type of applications is
 known as error-tolerant. Approximate computing looks to use these types of data to create algorithms,
 languages, compilers, circuits and computer architectures that have the common objective of lowering
 the energy consumption and increasing the performance at the cost of having an approximate result.
 
-One of the most important areas of research currently is machine learning. Its main property is
+Machine learning is a current area of research that can take advantage of the benefits of approximate
+computing. Its main property is
 decision making based on processing big amounts of data. This data can be written, visual (images, video) or 
 audio information, as well as taking the feedback into account to improve the learning process.
 Approximate computing can take advantage of this fact and use it to reduce the computational effort
 required and, in this manner, improve significantly the investigation area of machine learning.
 
-This work looks to explore methods and techniques for aproximate hardware definition on FPGA, such that
+This work looks to explore methods and techniques for approximate hardware definition on FPGA, such that
 it could be used on machine learning applications, specifically by generating approximate hardware
 kernels for CNNs through the use of OpenCL. The current project will deliver useful tools for any 
 other developer that requires to accelerate their machine learning algorithms through the use of FPGAs.
@@ -50,7 +51,7 @@ Investigation Center of Karlsruhe. It is located in Karlsruhe, in the Baden-Wür
 southwest of Germany. Figure \ref{fig:mapakit} shows a map with the location of Baden-Württemberg inside the european
 country and the location of Karlsruhe inside the aforementioned state.
 
-\begin{figure}
+\begin{figure}[H]
     \includegraphics[width=\linewidth]{fig/mapakit.eps}
     \caption{Map of Germany with Baden-Wüttemberg marked (left) \cite{badenmap} and location of Karlsruhe within the state (right) \cite{karlsmap}}
     \label{fig:mapakit}
@@ -82,7 +83,7 @@ an interdisciplinary cooperation \cite{kitorg}.
 
 The Department of Informatics is one of the first to be established on Germany. This department is formed
 by different institutes focused on teaching and investigation of topics associated with informatics. As
-part of the Department of Informations the CES comes as a center of investigation on aspects related
+part of the Department of Information the CES comes as a center of investigation on aspects related
 with the design of embedded systems, from the reliability of electrical circuits to the management of
 electrical power on systems with multiple and many cores.
 
@@ -90,19 +91,20 @@ electrical power on systems with multiple and many cores.
 
 The project is developed within the technical area of approximate computing, which is part of the areas
 of interest of computer engineering. Approximate computing looks to relax the numerical equivalence 
-between the specification and implementation of such applications, approximate computing promises significant 
-energy-efficiency improvements and has gained significant traction over the past few years \cite{surveyqu}. Within
-appromate computing, the project focuses on the utilization of \intelOCL to develop approximate hardware
-kernels and their application on CNNs, highlighting the effect of these kernels on the improvement in 
+between the specification and implementation of such applications promising significant 
+energy-efficiency improvements and it has gained significant traction over the past few years \cite{surveyqu}. Within
+approximate computing, the project focuses on the utilization of \intelOCL  to develop approximate hardware
+kernels and their application on CNNs. The goal is to highlight the effect of these kernels on the improvement in 
 performance and reduction on energy consumption in comparison to exact kernels.
 
-Furthermore, OpenCL is a tool that allows to define procedures on heterogeneous platformes through the 
+This kernels must be designed using high-level synthesis tools. OpenCL is a tool that allows to define 
+procedures on heterogeneous platforms through the 
 use of a high-level programming language. The knowledge on hardware changes via the use of a software 
 description is necessary to develop the project.
 
 \subsection{Similar works}
 
-In the area of implementing neural networks on FPGA using OpenCL, notable previous works are:
+In the area of neural network implementation on FPGA using OpenCL, notable previous works are:
 \begin{itemize}
     \item Suda et al. introduce a complete OpenCL-based accelerator design for CNNs based on
     matrix multiplication. They also explain algorithms to apply convolution by rearranging
@@ -110,7 +112,7 @@ In the area of implementing neural networks on FPGA using OpenCL, notable previo
     for the current project. \cite{suda}
     \item Wang et al. propose a CNN implementation on FPGA specifically taking advantage of 
     the ability to allow communication between layers through data channels \cite{pipecnn}.
-    \item Zhang and Li present a model to analyse the resource usage on an FPGA, as well as
+    \item Zhang and Li present a model to analyze the resource usage on an FPGA, as well as
     implementing their own accelerator based on OpenCL \cite{zhangcnn}.
 \end{itemize}
 
@@ -131,10 +133,10 @@ FPGAs and allowing for further research on the area.
 
 \subsection{Problem context}
 
-In the last years, discussions on the physical (and economical) limits of the very large scale integration 
+In the last years, discussions on the physical (and economical) limits of the very-large-scale integration 
 of transistors have surfaced \cite{aftermoore}\cite{moorelawlimit}, where statements like Moore's Law exert pressure the big chip manufaturers.
 Gordon Moore himself has assured that this trend cannot be maintained for a long time \cite{mooredead}. This leads to the
-search of new paradigms or techniques that allow to sustatin the high requirements on performance and 
+search of new paradigms or techniques that allow to sustain the high requirements on performance and 
 energy consumption of applications in the technological world, where a need to process even higher amounts
 of data is increasing. Some solutions to this increasing demand have appeared, such as multicore computers,
 multithreading architectures, large scale computers, GPU processing and more.
@@ -143,34 +145,34 @@ Despite these solutions, there exist other problems that cannot be solved just b
 of the processor. Some of these problems are:
 
 \begin{compactitem}
-    \item The memory wall: Wulf and McKee\cite{memorywall} describe an inminent problem on which the superior speed increase
+    \item The memory wall: Wulf and McKee \cite{memorywall} describe an imminent problem on which the superior speed increase
     of the processors is a lot higher that the improvement on memory technologies. This requires solutions that
     try to reduce the amount of memory accesses.
-    \item The utilization wall: Taylor et al.\cite{utilizationwall} noticed a phenomenom that appears due to the increase on the amount
+    \item The utilization wall: Taylor et al. \cite{utilizationwall} noticed a phenomenon that appears due to the increase on the amount
     of transistors per unit of area in a chip. The problem is related to an exponential reduction of the usable
     percentage of the chip depending on the scale of integration of the transistors.
     \item Problems with thermal dissipation: with the increase of frequency of the microprocessors, the level of 
-    heat disipation has increased, forcing a reduction on the operational voltage. Some solutions have been proposed
-    to this problem, like the utilization of multicore processorss with cores that deactivate themselves to reduce
+    heat dissipation has increased, forcing a reduction on the operational voltage. Some solutions have been proposed
+    to this problem, like the utilization of multicore processors with cores that deactivate themselves to reduce
     the workload \cite{whitepaper}.
 \end{compactitem}
 
-Due to these problems and the increasing existence of error-resilient applications (e.g. \cite{errortolerant}) paradigms such as
-approximate computing have appeared. This paradigm tries to eliminate, or reduce, the need for precision
+Approximate computing tries to solve this type of problems with the help of the recent increase of error-resilient
+applications (e.g. \cite{errortolerant}). This paradigm tries to eliminate, or reduce, the need for precision
 during processing with the goal of obtaining gains in energy efficiency and processing speed.
 
-Furthermore, one area of interest withing the error-resilient application world is machine learning.
+Furthermore, one area of interest within the error-resilient application world is machine learning.
 The goal of this area is to allow a computational system to execute tasks without the need for a prior
 specific programming and, in some cases, using previous results as feedback to improve the execution.
 Algorithms used in machine learning look to build mathematical models based on "training" data to perform
 tasks without explicit programming \cite{patternrecogbook}. Due to their nature, machine learning applications do not present
-an exact response inmediately, or even never, instead they require multiple feedback cycles to achieve
+an exact response immediately, or even never, instead they require multiple feedback cycles to achieve
 the expected response. This means that approximate computing is a potential paradigm to work with this
 type of applications \cite{approximatecomp}.
 
 \subsection{Justification of the problem}
 
-Approximate computing is an area that is till in the upswign. There are diverse investigations and designs
+Approximate computing is an area that is still in the upswing. There are diverse investigations and designs
 that look to take advantage of the existence of error-tolerant applications. However, it is necessary to
 continue advancing the paradigm and develop new techniques in order to observe its contributions in daily
 life. The importance of this paradigm resides on the fact that it does not depend on the current state
@@ -179,7 +181,7 @@ of the technology to bring forth energetic and performance improvements.
 The use of FPGA in the area of approximate computing is still under explored. At the same time, machine
 learning applications are of great interest to a lot of fields. An improvement on current machine learning
 implementations through the combination of both areas would generate new opportunities and solutions
-with low energectic consumption and high adapdability levels. Following this thought, the project is
+with low energetic consumption and high adaptability levels. Following this thought, the project is
 important due to the following:
 
 \begin{compactitem}
@@ -219,10 +221,16 @@ in the area of FPGAs for machine learning applications through approximate hardw
 Each neuron in a neural network is represented as a "hardware kernel" that gets defined the 
 calculations and processes that it needs to do on the input data to analyze it.
 Through the use of software tools like OpenCL, it is possible to define kernels that perform
-machine learning tasks. So, combining all these areas and tools, an improvement on performance and
-energy consumption must me possible to supply the global demand of processing.
+machine learning tasks. Combining all these areas and tools, an improvement on performance and
+energy consumption must be possible, allowing machine learning applications to keep up
+with the global demand for higher amounts of data processing.
+
 
 \section{Objectives}
+
+The project tries to find a solution to the ever increasing energy consumption problem
+of current world technologies. This is accomplished by using low energy platforms such as
+FPGAs applied to CNNs with the use of high-level definition tools like OpenCL.
 
 \subsection{Main objective}
 
@@ -233,9 +241,9 @@ use of \intelOCL.
 
 \begin{compactitem}
     \item Describe the viable changes on the OpenCL tool for approximate hardware generation on FPGA.
-    \item Create aproximate and reusable hardware kernels for CNNs using OpenCL.
+    \item Create approximate and reusable hardware kernels for CNNs using OpenCL.
     \item Determine the error-tolerance level of CNNs when using approximate kernels instead of exact kernels.
-    \item Ascertain the reduccion of computational resources when using approximate kernels compared to the use of traditional exact kernels.
+    \item Ascertain the reduction of computational resources when using approximate kernels compared to the use of traditional exact kernels.
 \end{compactitem}
 
 \section{Scope, deliverables and limitations}
@@ -294,8 +302,8 @@ as the repercussions in performance and energy consumption.
     \item Theoretical investigation
         \begin{enumerate}
             \item Compilation report of the use of neural networks on FPGA: this report will contain
-            relevant information to be used in the rest of the project and will enable the decision
-            making in regards to neural networks on FPGA. 
+            relevant information to be used in the rest of the project and will guide the decision
+            making when designing neural networks on FPGA. 
             \item Progress report with the viable modifications: report with the modification possibilities
             with OpenCL and that affect the hardware definition on FPGA.
         \end{enumerate}
@@ -332,25 +340,36 @@ as the repercussions in performance and energy consumption.
             meetings.
             \item Final report: final report of the project with all relevant information that was
             generated during its course.
-        \end{enumerate}
+        \end{enumerate}have less
     
 \end{enumerate}
 
 \subsection{Limitations}
 
-LIM-01: the student must movilize to Germany in order to have less conflicts with the project supervisor.
+LIM-01: the student must mobilize to Germany in order to reduce conflicts with the project supervisor.
 Because of the lack of a visa, the time in the european country is limited to 3 months. 
  
-LIM-02:​ the student's budget is only 1000 euros during the stay in Germany.
+LIM-02:​ the student's budget is only 1000 euros during the stay in Germany. This money will only cover feeding, staying and commuting costs,
+limiting the possibility of buying new tools to develop the project. The student must use any tools that the supervisor or the university
+can give him.
 
-LIM-03: the student must comply with the regulations and limitations of the KIT in regards to international
+LIM-03: the student must comply with the regulations and limitations of the KIT regarding international
 students.
 
 LIM-04: no face to face meetings are possible with the advisor teacher due to the geographical location of 
-the student during the project. Every meeting and communication must be done via the internet.
+the student during the project. Due to timezone differences, the available times for meetings is limited
+to 8 hours or less per day and the meetings depend on having good internet service and working
+audio equipment.
 
 LIM-05: the project is based on a master thesis developed more than a year before the start of the current
 project. As such, compiling and executing the prior project limits the progress on the current project.
+
+LIM-06: as the student does not have access to a computer with a middle to high end GPU, the base software
+implementation of the CNN is limited to CPU only.
+
+LIM-07: some of the changes to be done on the CNN are changes to the original definition of the network.
+These changes may require a new training phase for the network which represents weeks on training.
+Any approximation proposed must work with the existing training weights for the selected CNN.
 
 % \subsection{Risks}
 

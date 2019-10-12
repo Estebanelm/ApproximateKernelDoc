@@ -95,7 +95,7 @@ between the specification and implementation of such applications promising sign
 energy-efficiency improvements and it has gained significant traction over the past few years \cite{surveyqu}. Within
 approximate computing, the project focuses on the utilization of \intelOCL  to develop approximate hardware
 kernels and their application on CNNs. The goal is to highlight the effect of these kernels on the improvement in 
-performance and reduction on energy consumption in comparison to exact kernels.
+performance and reduction on resource usage in comparison to exact kernels.
 
 This kernels must be designed using high-level synthesis tools. OpenCL is a tool that allows to define 
 procedures on heterogeneous platforms through the 
@@ -275,7 +275,7 @@ both implementations.
 
 \subsubsection{Exact CNN implementation on FPGA}
 
-An exact CNN implementation must be developed in order to have a baseline in order
+An exact CNN implementation must be developed in order to have a baseline
 to develop the approximate kernels. This exact CNN implementation is also used to
 compare results in order to evidence the performance and energy efficiency improvements.
 Finally, the approximate CNN implementation must be a modification of the exact model.
@@ -288,13 +288,12 @@ approximate and adds errors in the processing of the input data. Also, the appro
 implementation must have a set maximum error, which should be measurable and used
 in the mathematical models.
 
-\subsubsection{Comparison and mathematical modeling}
+\subsubsection{Comparison against base implementation}
 
-Using the results of both the exact and approximate implementation, a mathematical model
-should be created that reflects the changes in the error between the exact and
-approximate implementation of the CNN. This model will indicate which parameters could
-be changed in the approximate implementation in order to reduce or increase the error, as well
-as the repercussions in performance and energy consumption.
+Using the results of both the exact and approximate implementation, an analysis of
+the effects of approximate modifications against the exact implementation must be performed.
+This analysis should reflect which approximate changes are better in terms of performance gain,
+reduction of resource usage and accuracy loss.
 
 \subsection{Deliverables}
 
@@ -327,9 +326,9 @@ as the repercussions in performance and energy consumption.
         \end{enumerate}
     \item Testing stage
         \begin{enumerate}
-            \item Results of the exact tests: measurements of performance, precision and energy consumption while
+            \item Results of the exact tests: measurements of performance, precision and resource usage while
             testing the exact kernels.
-            \item Results of the approximate tests: measurements of performance, precision and energy consumption while
+            \item Results of the approximate tests: measurements of performance, precision and resource usage while
             testing the approximate kernels.
             \item Results documentation: comparison of the results between exact and approximate tests.
         \end{enumerate}
@@ -340,7 +339,7 @@ as the repercussions in performance and energy consumption.
             meetings.
             \item Final report: final report of the project with all relevant information that was
             generated during its course.
-        \end{enumerate}have less
+        \end{enumerate}
     
 \end{enumerate}
 
@@ -361,13 +360,10 @@ the student during the project. Due to timezone differences, the available times
 to 8 hours or less per day and the meetings depend on having good internet service and working
 audio equipment.
 
-LIM-05: the project is based on a master thesis developed more than a year before the start of the current
-project. As such, compiling and executing the prior project limits the progress on the current project.
-
-LIM-06: as the student does not have access to a computer with a middle to high end GPU, the base software
+LIM-05: as the student does not have access to a computer with a middle to high end GPU, the base software
 implementation of the CNN is limited to CPU only.
 
-LIM-07: some of the changes to be done on the CNN are changes to the original definition of the network.
+LIM-06: some of the changes to be done on the CNN are changes to the original definition of the network.
 These changes may require a new training phase for the network which represents weeks on training.
 Any approximation proposed must work with the existing training weights for the selected CNN.
 

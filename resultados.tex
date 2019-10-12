@@ -2,18 +2,18 @@
 
 In this chapter the processes, techniques and design decisions made
 to get the final results of the project are shown, as well as an analysis
-of these results and how they fulfill the objectives of the project.
+of these results and how they reflect the principles of approximate computing.
 
 \section{Solution}
 
 The CNN design and implementation is described in the following sections.
-Python is used for the base exact implementation while any approximation is done
-using OpenCL.
+Python is used for the base exact implementation done on a CPU while any approximation is done
+using OpenCL on the DE1-SoC board.
 
 \subsection{Base CaffeNet implementation}
 
-AlexNet is the winner of the ILSVRC in 2012. Trained using GPUs and based on 3 million training images, it is one
-of the best examples that increasing the depth of a NN helps increase its performance and accuracy.
+AlexNet is the winner of the ILSVRC in 2012. Trained using GPUs on 3 million images, it is one
+of the best examples of how increasing the depth of a NN helps increase its performance and accuracy.
 
 Caffe is a framework created to easily implement, train and execute NNs using Python or C++.
 The developers made example models based on popular CNNs, one of which is CaffeNet, a modification of the original
@@ -25,11 +25,11 @@ for the FPGA implementation and any approximate modification done on the network
 
 This is a full CPU implementation of CaffeNet using Python. As it is one of the most popular frameworks for CNN
 training and implementation, the performance gains and accuracy loses can be measured against it. This project
-does not reflect the gains over a GPU implementation due to hardware limitations.
+does not reflect the gains over a GPU implementation due to equipment limitations.
 
 Figure \ref{fig:caffenet} shows the configuration of the CNN. The network has an input matrix of 224{x}224{x}3
 and 
-contains the following configuration of layers and parameters \cite{reviewalex}:
+contains the following structure of layers and parameters \cite{reviewalex}:
 
 \begin{enumerate}
     \item Convolutional Layer: 96 kernels of size 11{x}11{x}3
@@ -86,7 +86,7 @@ of processing only images with .jpeg or .jpg extensions and accepts directories 
 process a batch of images.
 
 After finishing evaluating each of the images, the code retrieves the values of the output 
-matrix in the FPGA and prints to the screen the final classification, including up to the first 
+matrix in the FPGA and prints the final classification on the screen, including up to the first 
 5 possibilities in order to properly evaluate top-1 and top-5 accuracy.
 
 \subsubsection{Convolution layer}
@@ -302,7 +302,7 @@ the objective is to approximate the overlapping calculations for each neuron. Th
 by skipping every other loop call in the main convolution functionality and using the latest
 result as the output for every skipped iteration.
 
-\subsubsection{CNN definition changes}
+\subsubsection{CaffeNet definition changes}
 
 Some approximations that can be applied to the CNN are changing the configuration of the network
 in order to reduce the amount of computation done or approximate its results.
@@ -375,8 +375,241 @@ All of these resources should go down when implementing approximate versions of 
 
 \section{Results and analysis}
 
-\subsection{Error tolerance}
+The following sections show all relevant results from applying approximate modifications
+to the base CNN implementation. These results are compared to the CPU implementation
+in regards to accuracy loss and performance. Resource usage is evaluated against
+the first version of the working FPGA implementation.
 
-\subsection{Resource usage}
+Table \ref{tab:mainresults} shows the different measurements for every major modification. 
+The original AlexNet implementation data is used to compare against the results obtained 
+in the project. Discrepancies between the the original AlexNet implementation and the
+Python implementation are due to using different validation data sets, as the current
+project uses a newer data set obtained from downloading test images from image-net.org.
 
-\subsection{Performance}
+\begin{table}[H]
+    \begin{center}
+        \caption{Execution time, error rate and resource usage for different types of kernel and approximate modifications.}
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{lllllll}
+            \hline
+            Implementation                   & Top-1 Error (\%) & Top-5 Error (\%)    & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
+            AlexNet                          & 40.7             & 18.2                & -                   & -          & -        & -         \\
+            Python CaffeNet                  & 25.53            & 9.37                & 451                 & -          & -        & -         \\
+            Base FPGA (8-bit precision)      & 62.79            & 35.39               & 205                 & 92         & 53       & 11        \\
+            Fixed-point 7-bit (all layers)   & 94.94            & 79.88               & 203                 & 81         & 45       & 9         \\
+            Approximate pooling              & 70.34            & 46.58               & 198                 & 92         & 53       & 11        \\
+            All OpenCL optimizations         & 62.79            & 35.39               & -                   & 107        & 57       & 11        \\
+            Memoization (all pooling layers) & 71.45            & 47.00               & 196                 & 92         & 53       & 12        \\ \hline
+            \end{tabular}}
+            \label{tab:mainresults}
+    \end{center}
+\end{table}
+
+The results from Table \ref{tab:mainresults} are a summary of the main modifications done
+on the CNN implementation. They show modifications done on the extreme cases for every
+modification (applying modifications to all/none of the layers). As such, the accuracy
+varies a lot from the base implementation. As for performance, the initial performance of
+205 ms on the 8-bit implementation is used as the base for any comparison to other
+modifications.
+
+\subsubsection{Fixed-point}
+
+Figure \ref{fig:fpaccuracy} and Figure \ref{fig:fpperformance} show the accuracy degradation 
+and performance gain after
+modifying different layers and with two fixed-point configurations, 8-bit and 7-bit.
+8-bit is used on all layers and represents the original version of the FPGA implementation.
+This is due to limitations on the DE1-SoC FPGA.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=8cm]{fig/fpaccuracy.eps}
+    \caption{Error rate results on top-1 and top-5 accuracy for various fixed-point configurations}
+    \label{fig:fpaccuracy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=8cm]{fig/fpperformance.eps}
+    \caption{Execution time results for various fixed-point configurations}
+    \label{fig:fpperformance}
+\end{figure}
+
+Making changes to all layers of the CNN greatly degrades the accuracy of the network.
+This is because of propagation of the error from the first layers to the later ones.
+Because this error is also being approximated, the final result shows a big reduction 
+on accuracy. For 7-bit precision on all layers, the loss in accuracy is unacceptable as
+the Top-1 error rate falls way above 50\%. But, the loss in accuracy for applying 
+this precision on the later layers reflects better results that get close to the 8-bit implementation.
+
+Regarding performance for fixed-point modifications, the changes do not reflect big reductions
+in execution time. The main reason is that the number of operations stay the same. The reduction
+in resource usage, shown in Table \ref{fig:fpresource}, can be utilized to increase parallelism
+of the neuron operations and, in doing so, reduce execution time.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=8cm]{fig/fpresource.eps}
+    \caption{Resource usage results for various fixed-point configurations}
+    \label{fig:fpresource}
+\end{figure}
+
+\subsubsection{Approximate operations}
+
+Approximate MAC operations on convolutional/fully-connected layers was tested in combination with
+approximate pooling operation. Figure \ref{fig:operationaccuracy} shows the accuracy loss after
+applying one of each operation and their combination.
+The error rate is increased greatly for the MAC operation. This is because MAC is the most
+common operation in the CNN, while pooling is only done on three of the layers.
+These operations are applied to the all layers of the same type.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=8cm]{fig/operationaccuracy.eps}
+    \caption{Error rate results on top-1 and top-5 accuracy for various approximate operation implementations}
+    \label{fig:operationaccuracy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=8cm]{fig/operationresource.eps}
+    \caption{Resource usage for various approximate operation implementations}
+    \label{fig:operationresource}
+\end{figure}
+
+On figure \ref{fig:operationresource}, the resource usage for each combination is seen. The resource
+usage for the MAC operation exceeds the available resources on the DE1-SoC board because of the way
+they had to be implemented on OpenCL, using bit-level shifting to apply approximation. As OpenCL
+does not allow for bit manipulation within a variable, the resulting implementation requires more
+resources than the regular multiplication. Pooling does not show any changes in resource usage,
+as the memory used for iteration skipping on the inner loops is minimal.
+
+Performance on approximate operations was only measured for the approximate
+pooling operation. Because the resource usage is above the limits of the DE1-SoC board,
+the performance could not be measured. Accuracy was measured using an emulation of the
+implementation, which allows resource usages above 100\%. The execution time for
+the approximate pooling operation is 198ms, almost 4\% faster than the base implementation.
+It could be possible to reduce the parallelism of the pooling operation in order to reduce resource
+usage.
+
+\subsubsection{OpenCL optimizations}
+
+OpenCL optimizations did not yield any relevant results in terms of performance or
+resource utilization. Using the \textit{-fpc} flag resulted in higher than 100\% resource
+usage but no changes in accuracy. The most likely reason for no significant differences
+is because most of the implementation already contains most of these optimizations within
+the actual code. The OpenCL approximation flags work better on native float variables
+and operations with these values.
+
+\subsubsection{Memoization}
+
+Memoization on window shifting was applied only to layers with big filter matrix size and low
+stride values (less or equal than 2). As such, it was only applied to the three pooling layers.
+It is applied to reduce the number of operations in each layer in half, so it is only storing
+values once every two iterations of the main inner loop of the layer.
+Table \ref{tab:memoization} shows the results of applying memoization to the first, second and third
+pooling layers and combination of these. Resource usage increased on memory usage but the performance
+is improved because of it, while accuracy is reduced slightly for every change.
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Execution time, error rate and resource usage for memoization on different layer combinations.}
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{lllllll}
+            \hline
+            Layers applied                   & Top-1 Error (\%) & Top-5 Error (\%)    & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
+            None (Python)                    & 25.53            & 9.37                & 451                 & -          & -        & -         \\
+            None (FPGA)                      & 62.79            & 35.39               & 205                 & 92         & 53       & 11        \\
+            1st                              & 67.56            & 42.51               & 200                 & 92         & 53       & 12         \\
+            2nd                              & 64.91            & 38.22               & 202                 & 92         & 53       & 11        \\
+            3rd                              & 63.83            & 36.88               & 204                 & 92         & 53       & 11        \\
+            2nd + 3rd                        & 71.45            & 47.00               & 201                 & 92         & 53       & 12        \\
+            1st + 2nd + 3rd                  & 71.45            & 47.00               & 196                 & 92         & 53       & 12        \\ \hline
+            \end{tabular}}
+            \label{tab:memoization}
+    \end{center}
+\end{table}
+
+Due to implementing this technique on the pooling layers that provide downsampling, the accuracy
+is not affected greatly. Pooling is a good choice for approximation as it provides little changes
+to accuracy, but the gains in area or performance are not that significant because of the little
+amount of operations in comparison to convolution.
+
+\subsubsection{CaffeNet definition changes}
+
+Most of the changes applied in this section should require a retraining of the network. This is
+because of the nature of CNNs, as any change in the layer configuration or parameters requires
+new weights data for use in future executions. As such, the results are highly subjective to
+changes if retraining is done after applying them. Most of the relevant results are related
+to resource usage and performance. Accuracy was not measured for these changes due to
+limitations on network retraining time.
+
+Filter size was reduced for the convolutional layers. The results can be seen on Table \ref{tab:filter},
+with different filter size on different layers. The performance and memory gains can be significant
+for smaller filter matrixes.
+Reducing filter size is a change that greatly changes the configuration of the network, but
+can be applied with retraining.
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Execution time and resource usage for different configurations of filter size.}
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{llllll}
+                \hline
+                Layer                          & Filter size & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
+                Base FPGA                      & -           & 205                 & 92         & 53       & 11        \\
+                \multirow{2}{*}{Convolution 1} & 10x10       & 198                 & 89         & 50       & 10        \\
+                                               & 9x9         & 194                 & 87         & 49       & 9         \\
+                \multirow{2}{*}{Convolution 2} & 4x4         & 200                 & 89         & 50       & 10        \\
+                                               & 3x3         & 198                 & 88         & 49       & 10        \\
+                Convolution 3                  & 2x2         & 201                 & 90         & 51       & 10        \\ \hline
+            \end{tabular}}
+            \label{tab:filter}
+    \end{center}
+\end{table}
+
+Changes in stride value were done on the convolution and pooling layers. Table \ref{tab:stride}
+shows the changes in performance and resource gain for this change on different combinations of
+layers, increasing the value of the stride 2 per layer. Resource usage stays the same due 
+to not changing the resources used per operation, but
+the performance gain is significant.
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Execution time and resource usage for different stride values.}
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{lllll}
+                \hline
+                Layer                          & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
+                Base FPGA                      & 205                 & 92         & 53       & 11        \\
+                Convolution + Pooling 1        & 199                 & 92         & 53       & 11        \\
+                Convolution + Pooling 2        & 198                 & 92         & 53       & 11        \\
+                Convolution + Pooling 3        & 199                 & 92         & 53       & 11        \\
+                Convolution + Pooling 1,2      & 194                 & 92         & 53       & 11        \\
+                Convolution + Pooling 1,2,3    & 189                 & 92         & 53       & 11        \\ \hline
+            \end{tabular}}
+            \label{tab:stride}
+    \end{center}
+\end{table}
+
+Finally, removal of layers was only done as experimentation. This is the least recommended change as
+it means a complete different configuration as Alex/CaffeNet. The only layers that can
+be easily removed were the fifth convolution layer and second fully-connected layer, as the
+outputs from the layers before and inputs from the layers after match without any further changes.
+Table \ref{tab:layers} shows the results in terms of execution time and resource usage. There is
+a big gain on both, but retraining is completely required for accuracy measurements.
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Execution time, error rate and resource usage on removing layers from the configuration.}
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{lllll}
+                \hline
+                Layers removed                 & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
+                Base FPGA                      & 205                 & 92         & 53       & 11        \\
+                Convolution 5                  & 190                 & 84         & 48       & 10         \\
+                Fully-connected 2              & 191                 & 86         & 50       & 10        \\
+                Convolution + fully-connected  & 176                 & 78         & 45       & 9         \\ \hline
+            \end{tabular}}
+            \label{tab:layers}
+    \end{center}
+\end{table}

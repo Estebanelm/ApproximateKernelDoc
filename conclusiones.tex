@@ -1,29 +1,48 @@
 \chapter{Conclusions and recommendations}
 
-Las conclusiones no son un resumen de lo realizado sino a lo que ha llevado el
-desarrollo de la tesis, no perdiendo de vista los objetivos planteados desde
-el principio y los resultados obtenidos.  En otras palabras, qué se concluye o
-a qué se ha llegado después de realizado la tesis de maestría.  Un error
-común es ``concluir'' aspectos que no se desarrollaron en la tesis, como
-observaciones o afirmaciones derivadas de la teoría directamente.  Esto último
-debe evitarse.
+In the next section, the main discoveries of the project are
+presented. Also, some recommendations are given on what
+future projects can focus on and how the current work
+can be expanded.
 
-Es fundamental en este capítulo hacer énfasis y puntualizar los
-aportes específicos del trabajo.
+\section{Conclusions}
 
-Es usual concluir con lo que queda por hacer, o sugerencias para mejorar los
-resultados.
+OpenCL can be used to describe approximate operations on neural networks through
+the use of compiler flags and approximate algorithm
+implementation. On CNN implementations, OpenCL allows
+for high-level implementation of hardware definition with
+performance gains and resource usage reductions.
 
+Approximate computing techniques can be used
+on CNNs to show their error-tolerance property. 
+Iteration skipping and memoization 
+on pooling layers had
+the best results in terms of performance with a minimal accuracy loss.
 
-\section{Jennier}
+One of the biggest advantages of using FPGA is being able to properly control
+the precision of variables being used. Because of this, changing the precision
+on arithmetic operations and input values represents significant reductions on resource
+usage on FPGA implementations of CNNs.
 
-En este capítulo se presenta un resumen con los descubrimientos más
-relevantes del capítulo de resultados, mediante las conclusiones y
-recomendaciones generales obtenidas a lo largo del desarrollo del
-proyecto.
-Debe reflejar de forma contundente y ordenada si se lograron los objetivos
-propuestos y si se cumplieron los entregables que se habían definido en el
-anteproyecto. Se deben incluir también los aspectos en que no se ahondó
-en el estudio pero que se consideran relevantes y quedaron como trabajos
-futuros.
+The best accuracy-performance ratio found was an increase of 5.66\% on the top-1 error
+with a performance gain of 4.39\%. This performance can be boosted
+by increasing parallelism and maximizing the resource usage
+of the FPGA. A combination of techniques could be used to achieve even 
+lower execution times with different levels of accuracy.
 
+\section{Recommendations}
+
+The utilization of approximate computing techniques on FPGA-implemented
+CNNs can be expanded through the combination of the different types
+of techniques shown in this work. The current project's scope can
+be expanded to show the maximum performance and resource usage gain
+from approximate techniques.
+
+OpenCL represents a good entry into the hardware definition area.
+The project, however, could be expanded upon through the use of
+low-level hardware definition languages such as Verilog to produce
+finely-tuned approximate solutions.
+
+The current project targeted a relatively low power FPGA. The use
+of a more powerful platform could lead to better performance
+in comparison to a CPU/GPU CNN implementation.

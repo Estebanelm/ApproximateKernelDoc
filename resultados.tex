@@ -6,7 +6,7 @@ of these results and how they reflect the principles of approximate computing.
 
 \section{Solution}
 
-The CNN design and implementation is described in the following sections.
+The CNN design and implementation are described in the following sections.
 Python is used for the base exact implementation done on a CPU while any approximation is done
 using OpenCL on the DE1-SoC board.
 
@@ -19,12 +19,13 @@ Caffe is a framework created to easily implement, train and execute NNs using Py
 The developers made example models based on popular CNNs, one of which is CaffeNet, a modification of the original
 AlexNet configuration with the pooling and normalization layers switched.
 
-Caffe is used to implement an script that uses the training data from \cite{donahue2012bvlc} and executes the network
+Caffe is used to implement a script that uses the training data from \cite{donahue2012bvlc} and executes the network
 over 4000 images downloaded from the ImageNet web page. This generates an output that is used as the baseline
 for the FPGA implementation and any approximate modification done on the network.
 
 This is a full CPU implementation of CaffeNet using Python. As it is one of the most popular frameworks for CNN
-training and implementation, the performance gains and accuracy loses can be measured against it. This project
+training and implementation, the performance gains and accuracy loses can be measured against it. As mentioned
+before, this project
 does not reflect the gains over a GPU implementation due to equipment limitations.
 
 Figure \ref{fig:caffenet} shows the configuration of the CNN. The network has an input matrix of 224{x}224{x}3
@@ -77,10 +78,24 @@ Each of the layers were implemented as OpenCL kernels that the compiler transfor
 file that can be used to reprogram the FPGA directly from the Yocto Linux distribution ran
 on the ARM Cortex-A9 processor.
 
+Figure \ref{fig:projectDiagram} shows the general configuration of the OpenCL implementation.
+The host code exchanges information with the kernels programmed into the FPGA.
+Communication between kernels is done through OpenCL channels, a FIFO buffer that reduces
+latency by removing the need to read and write to memory the calculations done
+on every layer.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=15cm]{fig/projectDiagram.eps}
+    \caption{Flow diagram of the OpenCL implementation}
+    \label{fig:projectDiagram}
+\end{figure}
+
 \subsubsection{Host code}
 
 The host code is developed using C++, following common \intelOCL examples. The code for this
-project is in charge of inserting the training weights file into each of the layers of the
+project is in charge of inserting the training weights file into the global memory
+for each of the layers of the
 FPGA, as well as resizing the images to fit the 224{x}224{x}3 requirement. The code is capable
 of processing only images with .jpeg or .jpg extensions and accepts directories in order to
 process a batch of images.
@@ -88,6 +103,14 @@ process a batch of images.
 After finishing evaluating each of the images, the code retrieves the values of the output 
 matrix in the FPGA and prints the final classification on the screen, including up to the first 
 5 possibilities in order to properly evaluate top-1 and top-5 accuracy.
+
+\subsubsection{Compilation of OpenCL binaries}
+
+Using a JSON description of the network, the OpenCL offline compiler is run for each of
+the different kernels that compose the network. These kernels are configured to be compiled
+and form the complete neural network inside the FPGA after programming. Parameters such as
+number of neurons, number of layers, input and output sizes and fixed-point precision are
+preconfigured before running the compilation process.
 
 \subsubsection{Convolution layer}
 
@@ -110,7 +133,7 @@ The general algorithm is as follows:
 
 These steps must be repeated for every neuron. This process can be optimized using OpenCL
 pragma directives to allow for Single Instruction Multiple Data (SIMD) processing. The
-parameters that define the convolution layer can be seen in Table \ref{table:convlayer}.
+parameters that define the convolution layer can be seen in Table \ref{tab:convlayer}.
 Static parameters are defined for every layer, while dynamic ones are defined per layer
 using a JSON description of the network.
 
@@ -143,7 +166,7 @@ configuration. This means that the kernel downsample the input by selecting the 
 value of each input window matrix and the stride used results in overlapping results.
 
 The algorithm is a simple iteration over each of the values of the window and selecting
-the maximum. The parameters used in this type of layer are shown in Table \ref{table:poolinglayer}
+the maximum. The parameters used in this type of layer are shown in Table \ref{tab:poolinglayer}
 The SIMD factor determines the size of the local memory to be used.
 
 \begin{table}[H]
@@ -230,7 +253,7 @@ and resource usage is described in the following sections.
 \subsubsection{Arbitrary precision}
 
 The fixed-point precision is defined for each layer on the JSON description of the network.
-Each number contains an integer and fractional part, but are stored in the same variable.
+Each number contains an integer and fractional part but are stored in the same variable.
 To determine the bit length and position of the variable, a simple notation is used: 
 \textit{[l,p]}, where \textit{l} is the length and \textit{p} is the position of the decimal
 point from right to left.
@@ -247,12 +270,13 @@ $$
 
 Fixed-point precision can change from the input of one layer to its output. This is achieved
 by aligning the precision before applying the specific operation. The limitation is that the
-input precision of a layer must match the output precision of the layer before it.m
+input precision of a layer must match the output precision of the layer before it.
 
-Aside from manually implementing fixed-point precision, \intelOCL allows for implementation
+While it is possible to manually implement fixed-point precision integers,
+Intel's\textsuperscript{\textregistered} FPGA SDK for OpenCL\textsuperscript{TM} allows for implementation
 of compilable arbitrary precision integers. Listing \ref{code:arbitrary} shows a simple
 multiplication of two 7-bit integers, the result being saved into a 14-bit integer. The
-compiler automatically assigns the desired amount of bits for each variable.
+compiler automatically assigns the desired number of bits for each variable.
 
 \begin{lstlisting}[language=C++, caption=Arbitrary precision integers, yielding
 a 14 bit result, label=code:arbitrary]
@@ -268,9 +292,12 @@ A CNN spends most of its computational resources on operations within the layers
 can be changed to an approximate version of themselves. Some of the approximations used are:
 
 \begin{itemize}
-    \item Approximate MAC: using Adams \cite{adams2019energy} implementation of an energy-efficient
-    and approximate MAC unit, gains in resource usage are expected. The execution time changes
-    are unknown as Adams did not measure this specific parameter.
+    \item Approximate MAC: using Adams's \cite{adams2019energy} 
+    implementation of an energy-efficient
+    and approximate MAC unit brings gains in resource usage. 
+    The execution time changes
+    are unknown and will be experimented on, as 
+    Adams did not measure this specific parameter.
     \item Faster pooling operation: pooling operation iterates over the input matrix
     looking for the maximum value on each window. A faster operation can ignore specific
     values or skip loop iterations.
@@ -278,15 +305,15 @@ can be changed to an approximate version of themselves. Some of the approximatio
 
 \subsubsection{OpenCL compiler optimizations}
 
-OpenCL offers optimizations that promise increases in performance at the cost of accuracy.
-This optimizations are set on compile time and are specific to OpenCL, not Intel's implementation
+OpenCL offers optimizations that allow increases in performance at the cost of accuracy.
+These optimizations are set on compile time and are specific to OpenCL, not Intel's implementation
 for the FPGA. The main approximations used are:
 
 \begin{itemize}
     \item -fp-relaxed: relaxes the order of arithmetic operations. This is only applied 
     to operations on which the order does not affect the end result.
-    \item -fpc: Removes intermediary roundings and conversions when possible, 
-    and changes the rounding mode to round towards zero for 
+    \item -fpc: Removes intermediary roundings and conversions when possible. 
+    Changes the rounding mode to round towards zero for 
     multiplies and adds.
     \item -cl-mad-enable: changes MAC operations to a mad. This is an approximate version of
     MAC with reduced accuracy.
@@ -356,7 +383,7 @@ between both times is used as the execution time of the network.
 
 \subsubsection{Resource usage}
 
-\intelOCL provides HTML reports of the estimated resource usage during and after compilation time.
+\intelOCL \hspace{1mm}provides HTML reports of the estimated resource usage during and after compilation time.
 The report contains information on the usage of the following resources:
 \begin{itemize}
     \item Adaptive look-up tables (ALUTs): represent the percentage of
@@ -377,12 +404,12 @@ All of these resources should go down when implementing approximate versions of 
 
 The following sections show all relevant results from applying approximate modifications
 to the base CNN implementation. These results are compared to the CPU implementation
-in regards to accuracy loss and performance. Resource usage is evaluated against
+in regard to accuracy loss and performance. Resource usage is evaluated against
 the first version of the working FPGA implementation.
 
 Table \ref{tab:mainresults} shows the different measurements for every major modification. 
 The original AlexNet implementation data is used to compare against the results obtained 
-in the project. Discrepancies between the the original AlexNet implementation and the
+in the project. Discrepancies between the original AlexNet implementation and the
 Python implementation are due to using different validation data sets, as the current
 project uses a newer data set obtained from downloading test images from image-net.org.
 
@@ -406,8 +433,8 @@ project uses a newer data set obtained from downloading test images from image-n
 \end{table}
 
 The results from Table \ref{tab:mainresults} are a summary of the main modifications done
-on the CNN implementation. They show modifications done on the extreme cases for every
-modification (applying modifications to all/none of the layers). As such, the accuracy
+on the CNN implementation. They show implementations done on the extreme cases for every
+type of modification (applying changes to all/none of the layers). As such, the accuracy
 varies a lot from the base implementation. As for performance, the initial performance of
 205 ms on the 8-bit implementation is used as the base for any comparison to other
 modifications.
@@ -458,7 +485,7 @@ of the neuron operations and, in doing so, reduce execution time.
 Approximate MAC operations on convolutional/fully-connected layers was tested in combination with
 approximate pooling operation. Figure \ref{fig:operationaccuracy} shows the accuracy loss after
 applying one of each operation and their combination.
-The error rate is increased greatly for the MAC operation. This is because MAC is the most
+The error rate is greatly increased for the MAC operation. This is because MAC is the most
 common operation in the CNN, while pooling is only done on three of the layers.
 These operations are applied to the all layers of the same type.
 
@@ -507,7 +534,7 @@ stride values (less or equal than 2). As such, it was only applied to the three 
 It is applied to reduce the number of operations in each layer in half, so it is only storing
 values once every two iterations of the main inner loop of the layer.
 Table \ref{tab:memoization} shows the results of applying memoization to the first, second and third
-pooling layers and combination of these. Resource usage increased on memory usage but the performance
+pooling layers and combination of these. Resource usage increased on memory usage, but the performance
 is improved because of it, while accuracy is reduced slightly for every change.
 
 \begin{table}[H]
@@ -546,7 +573,7 @@ limitations on network retraining time.
 Filter size was reduced for the convolutional layers. The results can be seen on Table \ref{tab:filter},
 with different filter size on different layers. The performance and memory gains can be significant
 for smaller filter matrixes.
-Reducing filter size is a change that greatly changes the configuration of the network, but
+Reducing filter size is a change that greatly changes the configuration of the network but
 can be applied with retraining.
 
 \begin{table}[H]
@@ -592,7 +619,7 @@ the performance gain is significant.
 \end{table}
 
 Finally, removal of layers was only done as experimentation. This is the least recommended change as
-it means a complete different configuration as Alex/CaffeNet. The only layers that can
+it means a completely different configuration as Alex/CaffeNet. The only layers that can
 be easily removed were the fifth convolution layer and second fully-connected layer, as the
 outputs from the layers before and inputs from the layers after match without any further changes.
 Table \ref{tab:layers} shows the results in terms of execution time and resource usage. There is

@@ -24,6 +24,15 @@ the precision of variables being used. Because of this, changing the precision
 on arithmetic operations and input values represents significant reductions on resource
 usage on FPGA implementations of CNNs.
 
+The biggest losses in accuracy are observed when making changes to
+the initial layers of the CNN. Approximate computing works better
+on the final layers of the CNN where the propagation of data
+between layers has the minimum effect on accuracy.
+
+OpenCL optimizations did not yield relevant results, as most of the
+implementations are irrelevant to CNNs or were manually implemented
+through low-level definitions.
+
 The best accuracy-performance ratio found was an increase of 5.66\% on the top-1 error
 with a performance gain of 4.39\%. This performance can be boosted
 by increasing parallelism and maximizing the resource usage
@@ -33,16 +42,41 @@ lower execution times with different levels of accuracy.
 \section{Recommendations}
 
 The utilization of approximate computing techniques on FPGA-implemented
-CNNs can be expanded through the combination of the different types
+CNNs can be further explored through the combination of the different types
 of techniques shown in this work. The current project's scope can
 be expanded to show the maximum performance and resource usage gain
 from approximate techniques.
+
+A way to improve the results of the project would be to increase
+the number of modifications on each of the layers and making
+a bigger number of combinations between these modifications.
+A future project could use the current one as a baseline to
+improve the current results.
 
 OpenCL represents a good entry into the hardware definition area.
 The project, however, could be expanded upon through the use of
 low-level hardware definition languages such as Verilog to produce
 finely-tuned approximate solutions.
 
-The current project targeted a relatively low power FPGA. The use
+Changing the base CNN configuration is not recommended as it requires
+retraining of the network. As CNNs have a large number of layers,
+the training process takes a long time (days or weeks). Depending
+on the time constraints of the project, this may not be feasible.
+
+Using up-to-date CNN configurations with better accuracy and
+performance than AlexNet/CaffeNet could significantly improve
+the results of the project. For future projects, it is 
+recommended to look at
+newer implementations of CNNs on FPGAs, as it is a growing
+knowledge area.
+
+In some cases, there is a trade-off between accuracy and memory usage
+that can be explored in order to reduce general resource usage and
+energy consumption. The current project uses less than 20\% of the
+available memory on the FPGA, which could be increased to have
+big gains on performance through the use of techniques such as
+memoization.
+
+The current project targets a relatively low-performance FPGA. The use
 of a more powerful platform could lead to better performance
 in comparison to a CPU/GPU CNN implementation.

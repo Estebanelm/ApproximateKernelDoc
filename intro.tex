@@ -43,6 +43,10 @@ other developer that requires to accelerate their machine learning algorithms th
 
 \section{Project background}
 
+In this section the background of the project is presented, including: the organization in which the project was
+developed, the knowledge area of the project in relationship to computer engineering and similar
+works that serve as a starting point for the project.
+
 \subsection{Organization}
 
 The project is developed in the KIT, a university focused on the development of technology and science.
@@ -130,6 +134,10 @@ on which some CNN frameworks were implemented for low-power FPGAs, reducing the 
 FPGAs and allowing for further research on the area.
 
 \section{Problem statement}
+
+This section looks to expose the main problem the project is trying to solve as well
+as why approximate computing and FPGA implementation of CNNs can be a solution
+to the problem.
 
 \subsection{Problem context}
 
@@ -248,6 +256,9 @@ use of \intelOCL.
 
 \section{Scope, deliverables and limitations}
 
+The scope and deliverables of the project
+are defined in this section with the limitations the student faced during its development.
+
 \subsection{Scope}
 
 The project's end goal is designing, developing and implementing approximate hardware kernels on FPGA.
@@ -278,6 +289,9 @@ both implementations.
 An exact CNN implementation must be developed in order to have a baseline
 to develop the approximate kernels. This exact CNN implementation is also used to
 compare results in order to evidence the performance and energy efficiency improvements.
+The implementation can be developed on different hardware types such as
+CPU-based, GPU-based or a combination of both; the scope of the project
+is limited to the CPU implementation.
 Finally, the approximate CNN implementation must be a modification of the exact model.
 
 \subsubsection{Approximate CNN implementation on FPGA}
@@ -297,13 +311,21 @@ reduction of resource usage and accuracy loss.
 
 \subsection{Deliverables}
 
+Most of the deliverables listed here are located within the rest of this project report.
+Source code can be found at: http://gitlab.com/jocastro/ax-opencl-cnn.
+Minutes of meetings and the current
+report is kept at: https://www.dropbox.com/home/Esteban\%20Calvo
+
 \begin{enumerate}
     \item Theoretical investigation
         \begin{enumerate}
-            \item Compilation report of the use of neural networks on FPGA: this report will contain
+            \item Compilation information of the use of neural networks on FPGA: theoretical background
+            chapter of
+            this report will contain
             relevant information to be used in the rest of the project and will guide the decision
             making when designing neural networks on FPGA. 
-            \item Progress report with the viable modifications: report with the modification possibilities
+            \item Report with viable approximate modifications: the solution chapter will have 
+            the modification possibilities
             with OpenCL and that affect the hardware definition on FPGA.
         \end{enumerate}
     \item Design stage
@@ -313,7 +335,7 @@ reduction of resource usage and accuracy loss.
             for CNNs. It should contain mathematical models that can be compared against the results
             of the project.
             \item Design of the error calculation model: contains the mathematical formulations that allow
-            to create a precise calculation of the results that will be obtained so they can be compared
+            to create precise calculations of the obtained results so they can be compared
             with the gain in performance.
         \end{enumerate}
     \item Code development
@@ -334,7 +356,7 @@ reduction of resource usage and accuracy loss.
         \end{enumerate}
     \item Project administration
         \begin{enumerate}
-            \item Design document: contains the design of every tool developed during the project.
+            \item Design documentation: contains the design of every tool developed during the project.
             \item Meeting minutes: contains all information obtained in the progress and validation
             meetings.
             \item Final report: final report of the project with all relevant information that was
@@ -366,6 +388,10 @@ implementation of the CNN is limited to CPU only.
 LIM-06: some of the changes to be done on the CNN are changes to the original definition of the network.
 These changes may require a new training phase for the network which represents weeks on training.
 Any approximation proposed must work with the existing training weights for the selected CNN.
+
+LIM-07: the exact CNN implementation is CPU only. No other processing units
+such as GPUs are used, limiting the scope of the results and comparisons
+done against the approximate implementation.
 
 % \subsection{Risks}
 

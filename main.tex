@@ -25,6 +25,8 @@
 \usepackage[backend=biber]{biblatex}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{graphicx}
 
 %Code listing style named "mystyle"
 \lstdefinestyle{mystyle}{
@@ -118,7 +120,8 @@ FPGA, deep learning, OpenCL, High-level Synthesis}
   \pagenumbering{alph}
   % fix some terms not activated due to the bug of hyperref with spanish.
   \renewcommand{\tablename}{Table}
-  \renewcommand{\listtablename}{Table index}
+  % \renewcommand{\listtablename}{Table index}
+  \renewcommand{\listtablename}{List of Tables}
   \renewcommand{\examplesolution}{Solution}
   \pagestyle{empty}
 
@@ -132,6 +135,9 @@ FPGA, deep learning, OpenCL, High-level Synthesis}
   %\include{titlepage_msc_en}   % Titlepage in English (only if thesis is in En)
 
   % \include{disclaimer}
+
+  % \includepdf[page={1}]{acta}
+  \includegraphics[width=\linewidth,page=1]{acta}
 
   \include{dedicatoria}
   \include{agradecimientos}
@@ -199,7 +205,7 @@ FPGA, deep learning, OpenCL, High-level Synthesis}
 
   %----------------------------------------------------------------------------
   % \annex
-  \renewcommand{\appendixname}{Annex}
+  % \renewcommand{\appendixname}{Annex}
   \appendix
   %----------------------------------------------------------------------------
 

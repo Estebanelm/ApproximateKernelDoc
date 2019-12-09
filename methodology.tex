@@ -23,11 +23,11 @@ and hardware generation.
 
 \subsection{Objectives perspective}
 
-From an objectives standpoint, this is an exploratory research due to trying to explore 
-the possibilities of performance and energy gain through the use of approximate hardware generation.
+From an objectives standpoint, this is an exploratory research as it explores the possible 
+gains in performance and energy through the use of approximate hardware generation.
 The area of approximate computing on FPGAs, specifically for CNN implementations, is currently
 underexplored. This research will help grow the field and could enable future research
-or applications on using FPGAs to accelerate the field of machine learning.
+or applications on using FPGAs to accelerate the field of Machine Learning.
 
 \subsection{Mode of enquiry}
 
@@ -51,7 +51,9 @@ The exact kernel generation will be based on the CaffeNet implementation. This i
 with the pooling and normalization layers reversed \cite{donahue2012bvlc}. 
 
 The kernels are implemented using OpenCL on a DE1-SoC board, a hardware board with an on-chip processor and
-a Cyclone V FPGA. Two codes must be generated, the host code to control the execution that will be executed on
+a Cyclone V FPGA. This board was provided by the university and its use as a CNN accelerator has been tested
+previously by other authors \cite{suda}\cite{pipecnn}.
+Two codes must be generated, the host code to control the execution of the CNN on
 the embedded chip of the board and the device code that will perform the CNN calculations.
 
 The kernels already contain some approximations due to limitations on the FPGA being used, mainly on using

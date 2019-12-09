@@ -12,15 +12,15 @@ using OpenCL on the DE1-SoC board.
 
 \subsection{Base CaffeNet implementation}
 
-AlexNet is the winner of the ILSVRC in 2012. Trained using GPUs on 3 million images, it is one
-of the best examples of how increasing the depth of a NN helps increase its performance and accuracy.
-
 Caffe is a framework created to easily implement, train and execute NNs using Python or C++.
 The developers made example models based on popular CNNs, one of which is CaffeNet, a modification of the original
 AlexNet configuration with the pooling and normalization layers switched.
 
+AlexNet was the winner of the ILSVRC in 2012. Trained using GPUs on 3 million images, it is one
+of the best examples of how increasing the depth of a NN helps increase its performance and accuracy.
+
 Caffe is used to implement a script that uses the training data from \cite{donahue2012bvlc} and executes the network
-over 4000 images downloaded from the ImageNet web page. This generates an output that is used as the baseline
+over 4000 images downloaded from the ImageNet \href{http://image-net.org/}{web page}. This generates an output that is used as the baseline
 for the FPGA implementation and any approximate modification done on the network.
 
 This is a full CPU implementation of CaffeNet using Python. As it is one of the most popular frameworks for CNN
@@ -247,7 +247,7 @@ has low computational complexity, as it is easy to implement.
 
 \subsection{Approximate changes}
 
-Any approximate changed done in order to reduce the accuracy but improve the performance
+Any approximate changes done in order to reduce the accuracy but improve the performance
 and resource usage is described in the following sections.
 
 \subsubsection{Arbitrary precision}
@@ -324,7 +324,7 @@ compilation process.
 
 \subsubsection{Memoization}
 
-Memoization is applied mainly on convolution layers with small stride values. This is because
+Memoization \cite{michie1968memo} is applied mainly on convolution layers with small stride values. This is because
 the objective is to approximate the overlapping calculations for each neuron. This is achieved
 by skipping every other loop call in the main convolution functionality and using the latest
 result as the output for every skipped iteration.
@@ -627,8 +627,8 @@ a big gain on both, but retraining is completely required for accuracy measureme
 
 \begin{table}[H]
     \begin{center}
-        \caption{Execution time, error rate and resource usage on removing layers from the configuration.}
         \resizebox{\textwidth}{!}{
+            \caption{Execution time and resource usage on removing layers from the configuration.}
             \begin{tabular}{lllll}
                 \hline
                 Layers removed                 & Execution time (ms) & ALUTs (\%) & FFs (\%) & RAMs (\%) \\ \hline
